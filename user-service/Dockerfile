@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copy the JAR file into the container at /app
-COPY target/user-service-0.0.1-SNAPSHOT.jar /app/
+COPY target/user-service-0.0.1-SNAPSHOT.jar /app/user-service.jar
 
 # Specify the default command to run on container startup
-CMD ["java", "-jar", "user-service-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "user-service.jar"]

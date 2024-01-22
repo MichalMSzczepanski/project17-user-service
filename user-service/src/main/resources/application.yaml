@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    user: postgres
+    password: password
+    locations: classpath:db/migration/main
+
+logging:
+  level:
+    org.flywaydb: DEBUG
+

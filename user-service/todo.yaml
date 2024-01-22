@@ -1,3 +1,31 @@
 1 git:
 2 config:
-  - slf4j
+  1 profiles
+      - for local running and for docker deployment, db has issues
+      - application.yaml has commented out links to db's - fix needed via profiles most likely
+  - db:
+    - flyway/ liquibase for setting up db & entities
+    - docker-compose
+    - integration tests
+    - application variables for db connection (?)
+  - slf4j for logging
+3 semantics:
+  - user entity:
+      - password hashing prior to persistence
+  - user roles
+  - mapstruct mappers
+4 logic:
+  - /register
+  - /login
+  - /CRUD
+  - spring validation via spring-boot-starter-validation
+  - exception handler
+  - unit & integration tests
+
+wishlist:
+  - kafka queue to notification-service with creation/update/deletion
+  - aspects:
+      - on user creation
+      - on user update
+      - on user deletion
+
