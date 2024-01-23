@@ -3,3 +3,8 @@ spring:
     url: jdbc:postgresql://localhost:5433/users
   flyway:
     url: jdbc:postgresql://localhost:5433/users
+
+logging:
+  level:
+    org.flywaydb: TRACE
+    org.hibernate.SQL: TRACE

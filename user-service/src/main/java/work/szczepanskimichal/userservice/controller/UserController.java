@@ -1,11 +1,13 @@
 package work.szczepanskimichal.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.userservice.entity.UserDto;
+import work.szczepanskimichal.userservice.entity.UserUpdateDto;
 import work.szczepanskimichal.userservice.service.UserService;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -14,16 +16,30 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/create")
-    public UserDto create(UserDto userDto) {
+    @PostMapping("")
+    public UserDto create(@RequestBody UserDto userDto) {
         return userService.createUser(userDto);
     }
 
-    //read
+    @GetMapping("/{userId}")
+    public UserDto get(@PathVariable UUID userId) {
+        return userService.getUser(userId);
+    }
 
-    //update
+    @GetMapping("/all-users")
+    public List<UserDto> getAll() {
+        return userService.getAllUsers();
+    }
 
-    //delete
+    @PatchMapping("/{userId}")
+    public UserDto patch(@PathVariable UUID userId, @RequestBody UserUpdateDto userUpdateDto) {
+        return userService.updateUser(userId, userUpdateDto);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable UUID userId) {
+        userService.deleteUser(userId);
+    }
 
     //login
 

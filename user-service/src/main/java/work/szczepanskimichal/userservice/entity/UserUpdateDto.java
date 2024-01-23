@@ -8,9 +8,8 @@ import java.util.UUID;
 
 @Builder
 @Getter
-public class UserDto implements UserDAO {
+public class UserUpdateDto implements UserDAO {
 
-    private UUID id;
     private String email;
     private String password;
     private String passwordConfirmation;

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,7 +17,8 @@ import java.util.UUID;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
+@Getter
 public class User {
 
     @Id
@@ -30,6 +32,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Type type;
+
+    private boolean active;
 
     @Column(name = "phone_number")
     private String phoneNumber;

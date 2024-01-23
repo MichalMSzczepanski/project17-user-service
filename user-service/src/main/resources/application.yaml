@@ -9,8 +9,3 @@ spring:
     user: postgres
     password: password
     locations: classpath:db/migration/main
-
-logging:
-  level:
-    org.flywaydb: DEBUG
-
