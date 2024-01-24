@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/users
+  flyway:
+    enabled: true
+logging:
+  level:
+    org.flywaydb: TRACE
+    org.hibernate.SQL: TRACE

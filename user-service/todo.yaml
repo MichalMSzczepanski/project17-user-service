@@ -2,16 +2,15 @@
 2 config:
   - db:
     - application variables for db connection (?)
-    - for integration tests
+    - for integration tests (postgres/ h2)
 3 semantics:
   - user entity:
       - password hashing prior to persistence
 4 logic:
   - /register
-  - email after registration for confirmation
   - /login
+  - email after registration for confirmation
   - spring validation via spring-boot-starter-validation (tbc if needed)
-  - unit & integration tests
 
 wishlist:
   - kafka queue to notification-service with creation/update/deletion

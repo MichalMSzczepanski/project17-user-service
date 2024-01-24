@@ -7,11 +7,14 @@
   4 configure flyway
   5 add flyway script creating user table V1__create_table_users_20240120.sql
   6 slf4j logger
+  7 add readme.md
+  8 test profile
 3 semantics:
   1 create user entity
   2 create user roles
   3 create draft flow for persisting user
   4 user mapper
+  5 user service crud tests
 4 logic:
   1 basic crud for users
   2 global exception handler

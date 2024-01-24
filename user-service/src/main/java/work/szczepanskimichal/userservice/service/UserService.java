@@ -14,7 +14,6 @@ import work.szczepanskimichal.userservice.repository.UserRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +26,8 @@ public class UserService {
     public UserDto createUser(UserDto userDto) {
         log.info("initiating user creation for email: {}", userDto.getEmail());
         validateUserFields(userDto);
-        var createdDto = userMapper.toDto(userRepository.save(userMapper.toEntity(userDto)));
-        log.info("successfully created user. email: {}", userDto.getId());
+        var createdDto = userMapper.toUserDto(userRepository.save(userMapper.toEntity(userDto)));
+        log.info("successfully created user. user id: {}", createdDto.getId());
         return createdDto;
     }
 
@@ -42,13 +41,13 @@ public class UserService {
             log.error("user with id: {} not found", userId);
             throw new UserNotFoundException(userId);
         } else {
-            return userMapper.toDto(userOptional.get());
+            return userMapper.toUserDto(userOptional.get());
         }
     }
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(userMapper::toDto)
+                .map(userMapper::toUserDto)
                 .toList();
     }
 
@@ -65,7 +64,7 @@ public class UserService {
                             .id(userId)
                             .createdAt(userEntity.getCreatedAt())
                             .build();
-            return userMapper.toDto(userRepository.save(updatedUser));
+            return userMapper.toUserDto(userRepository.save(updatedUser));
         }
     }
 

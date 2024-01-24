@@ -8,10 +8,12 @@ import work.szczepanskimichal.userservice.entity.UserUpdateDto;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserDto toDto(User user);
-
     User toEntity(UserDto userDto);
 
+    UserDto toUserDto(User user);
+
     User toEntity(UserUpdateDto userUpdateDto);
+
+    UserUpdateDto toUserUpdateDto(User user);
 
 }
