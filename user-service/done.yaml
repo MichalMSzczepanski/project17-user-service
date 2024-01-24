@@ -9,6 +9,7 @@
   6 slf4j logger
   7 add readme.md
   8 test profile
+  9 h2 db for test profile
 3 semantics:
   1 create user entity
   2 create user roles

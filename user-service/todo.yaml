@@ -2,10 +2,10 @@
 2 config:
   - db:
     - application variables for db connection (?)
-    - for integration tests (postgres/ h2)
 3 semantics:
-  - user entity:
-      - password hashing prior to persistence
+  - password hashing prior to user persistence
+  - create user assembler for integration tests
+  - user integration tests refactor
 4 logic:
   - /register
   - /login
