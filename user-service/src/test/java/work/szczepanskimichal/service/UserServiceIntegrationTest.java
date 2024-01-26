@@ -34,12 +34,7 @@ class UserServiceIntegrationTest {
     @Test
     void shouldCreateUser() {
         //given
-        var userDto = UserDto.builder()
-                .email("email@email.com")
-                .password("pass")
-                .passwordConfirmation("pass")
-                .type(Type.USER)
-                .build();
+        var userDto = UserAssembler.assembleRandomUserDto();
 
         //when
         var result = userService.createUser(userDto);
@@ -52,69 +47,46 @@ class UserServiceIntegrationTest {
     @Test
     void shouldThrowPasswordMismatchException_onUserCreation() {
         //given
-        var userDto = UserDto.builder()
-                .email("email@email.com")
-                .password("pass")
-                .passwordConfirmation("passss")
-                .type(Type.USER)
-                .build();
+        var userDto = UserAssembler.assembleRandomUserDto();
+        var corruptedUserDto = userDto.toBuilder().password("wrong_password").build();
 
         //when-then
-        assertThrows(PasswordMismatchException.class, () -> userService.createUser(userDto));
+        assertThrows(PasswordMismatchException.class, () -> userService.createUser(corruptedUserDto));
     }
 
     @Test
     void shouldThrowMissingFieldException_onUserCreation() {
         //given
-        var userDto = UserDto.builder()
-                .email(null)
-                .password("pass")
-                .passwordConfirmation("pass")
-                .type(Type.USER)
-                .build();
+        var userDto = UserAssembler.assembleRandomUserDto();
+        var corruptedUserDto = userDto.toBuilder().email(null).build();
 
         //when-then
-        assertThrows(MissingFieldException.class, () -> userService.createUser(userDto));
+        assertThrows(MissingFieldException.class, () -> userService.createUser(corruptedUserDto));
     }
 
     @Test
     void shouldThrowInvalidEmailException_onUserCreation() {
         //given
-        var userDto = UserDto.builder()
-                .email("email#email.com")
-                .password("pass")
-                .passwordConfirmation("pass")
-                .type(Type.USER)
-                .build();
+        var userDto = UserAssembler.assembleRandomUserDto();
+        var corruptedUserDto = userDto.toBuilder().email("not_an_email").build();
 
         //when-then
-        assertThrows(InvalidEmailException.class, () -> userService.createUser(userDto));
+        assertThrows(InvalidEmailException.class, () -> userService.createUser(corruptedUserDto));
     }
 
     @Test
     void shouldThrowIAdminProgrammaticCreationException_onUserCreation() {
-        //given
-        var userDto = UserDto.builder()
-                .email("email@email.com")
-                .password("pass")
-                .passwordConfirmation("pass")
-                .type(Type.ADMIN)
-                .build();
+        var userDto = UserAssembler.assembleRandomUserDto();
+        var corruptedUserDto = userDto.toBuilder().type(Type.ADMIN).build();
 
         //when-then
-        assertThrows(AdminProgrammaticCreationException.class, () -> userService.createUser(userDto));
+        assertThrows(AdminProgrammaticCreationException.class, () -> userService.createUser(corruptedUserDto));
     }
 
     @Test
     void shouldReturnTestUser() {
         // given
-        var user = User.builder()
-                .email("test@example.com")
-                .password("password")
-                .phoneNumber("1234567890")
-                .active(true)
-                .type(Type.USER)
-                .build();
+        var user = UserAssembler.assembleRandomUser();
         var userId = userRepository.save(user).getId();
 
         // when
@@ -128,22 +100,8 @@ class UserServiceIntegrationTest {
     @Test
     void shouldReturnAllUsers() {
         //given
-        var user1 = User.builder()
-                .email("test@example1.com")
-                .password("password")
-                .phoneNumber("1234567890")
-                .active(true)
-                .type(Type.USER)
-                .build();
-        userRepository.save(user1);
-        var user2 = User.builder()
-                .email("test@example2.com")
-                .password("password")
-                .phoneNumber("1234567890")
-                .active(true)
-                .type(Type.USER)
-                .build();
-        userRepository.save(user2);
+        userRepository.save(UserAssembler.assembleRandomUser());
+        userRepository.save(UserAssembler.assembleRandomUser());
 
         //when
         var result = userService.getAllUsers();
@@ -183,19 +141,12 @@ class UserServiceIntegrationTest {
     @Test
     void shouldDeleteUser() {
         //given
-        var user = User.builder()
-                .email("test@example.com")
-                .password("password")
-                .phoneNumber("1234567890")
-                .active(true)
-                .type(Type.USER)
-                .build();
-        var persistedUser = userRepository.save(user);
+        var user = userRepository.save(UserAssembler.assembleRandomUser());
 
         //when
-        userService.deleteUser(persistedUser.getId());
+        userService.deleteUser(user.getId());
 
         //then
-        assertTrue(userRepository.findById(persistedUser.getId()).isEmpty());
+        assertTrue(userRepository.findById(user.getId()).isEmpty());
     }
 }

@@ -6,7 +6,7 @@ import work.szczepanskimichal.enums.Type;
 
 import java.util.UUID;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 public class UserDto implements UserDAO {
 

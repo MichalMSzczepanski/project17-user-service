@@ -18,6 +18,7 @@
   3 create draft flow for persisting user
   4 user mapper
   5 user service crud tests
+  6 create userassembler for tests
 4 logic:
   1 basic crud for users
   2 global exception handler
