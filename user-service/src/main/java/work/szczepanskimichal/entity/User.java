@@ -1,4 +1,4 @@
-package work.szczepanskimichal.userservice.entity;
+package work.szczepanskimichal.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import work.szczepanskimichal.userservice.enums.Type;
+import work.szczepanskimichal.enums.Type;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

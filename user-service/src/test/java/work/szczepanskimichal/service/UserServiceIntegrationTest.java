@@ -1,19 +1,19 @@
-package work.szczepanskimichal.userservice.service;
+package work.szczepanskimichal.service;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import work.szczepanskimichal.userservice.entity.User;
-import work.szczepanskimichal.userservice.entity.UserDto;
-import work.szczepanskimichal.userservice.enums.Type;
-import work.szczepanskimichal.userservice.exception.AdminProgrammaticCreationException;
-import work.szczepanskimichal.userservice.exception.InvalidEmailException;
-import work.szczepanskimichal.userservice.exception.MissingFieldException;
-import work.szczepanskimichal.userservice.exception.PasswordMismatchException;
-import work.szczepanskimichal.userservice.mapper.UserMapper;
-import work.szczepanskimichal.userservice.repository.UserRepository;
+import work.szczepanskimichal.entity.User;
+import work.szczepanskimichal.entity.UserDto;
+import work.szczepanskimichal.exception.AdminProgrammaticCreationException;
+import work.szczepanskimichal.exception.InvalidEmailException;
+import work.szczepanskimichal.exception.PasswordMismatchException;
+import work.szczepanskimichal.mapper.UserMapper;
+import work.szczepanskimichal.repository.UserRepository;
+import work.szczepanskimichal.enums.Type;
+import work.szczepanskimichal.exception.MissingFieldException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,10 +1,10 @@
-package work.szczepanskimichal.userservice.controller;
+package work.szczepanskimichal.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import work.szczepanskimichal.userservice.entity.UserDto;
-import work.szczepanskimichal.userservice.entity.UserUpdateDto;
-import work.szczepanskimichal.userservice.service.UserService;
+import work.szczepanskimichal.entity.UserUpdateDto;
+import work.szczepanskimichal.entity.UserDto;
+import work.szczepanskimichal.service.UserService;
 
 import java.util.List;
 import java.util.UUID;

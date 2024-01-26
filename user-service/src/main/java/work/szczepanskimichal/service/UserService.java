@@ -1,15 +1,15 @@
-package work.szczepanskimichal.userservice.service;
+package work.szczepanskimichal.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import work.szczepanskimichal.userservice.entity.UserDAO;
-import work.szczepanskimichal.userservice.entity.UserDto;
-import work.szczepanskimichal.userservice.entity.UserUpdateDto;
-import work.szczepanskimichal.userservice.enums.Type;
-import work.szczepanskimichal.userservice.exception.*;
-import work.szczepanskimichal.userservice.mapper.UserMapper;
-import work.szczepanskimichal.userservice.repository.UserRepository;
+import work.szczepanskimichal.entity.UserDAO;
+import work.szczepanskimichal.entity.UserDto;
+import work.szczepanskimichal.entity.UserUpdateDto;
+import work.szczepanskimichal.exception.*;
+import work.szczepanskimichal.mapper.UserMapper;
+import work.szczepanskimichal.repository.UserRepository;
+import work.szczepanskimichal.enums.Type;
 
 import java.util.List;
 import java.util.UUID;

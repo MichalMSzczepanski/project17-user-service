@@ -1,9 +1,9 @@
-package work.szczepanskimichal.userservice.mapper;
+package work.szczepanskimichal.mapper;
 
 import org.mapstruct.Mapper;
-import work.szczepanskimichal.userservice.entity.User;
-import work.szczepanskimichal.userservice.entity.UserDto;
-import work.szczepanskimichal.userservice.entity.UserUpdateDto;
+import work.szczepanskimichal.entity.UserUpdateDto;
+import work.szczepanskimichal.entity.User;
+import work.szczepanskimichal.entity.UserDto;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

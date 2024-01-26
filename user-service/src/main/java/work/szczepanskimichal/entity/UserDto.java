@@ -1,15 +1,16 @@
-package work.szczepanskimichal.userservice.entity;
+package work.szczepanskimichal.entity;
 
 import lombok.Builder;
 import lombok.Getter;
-import work.szczepanskimichal.userservice.enums.Type;
+import work.szczepanskimichal.enums.Type;
 
 import java.util.UUID;
 
-@Builder(toBuilder = true)
+@Builder
 @Getter
-public class UserUpdateDto implements UserDAO {
+public class UserDto implements UserDAO {
 
+    private UUID id;
     private String email;
     private String password;
     private String passwordConfirmation;

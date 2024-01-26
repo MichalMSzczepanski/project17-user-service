@@ -1,4 +1,4 @@
-package work.szczepanskimichal.userservice.exception;
+package work.szczepanskimichal.exception;
 
 import java.util.UUID;
 

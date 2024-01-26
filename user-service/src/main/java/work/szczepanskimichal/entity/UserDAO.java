@@ -1,6 +1,6 @@
-package work.szczepanskimichal.userservice.entity;
+package work.szczepanskimichal.entity;
 
-import work.szczepanskimichal.userservice.enums.Type;
+import work.szczepanskimichal.enums.Type;
 
 public interface UserDAO {
 
