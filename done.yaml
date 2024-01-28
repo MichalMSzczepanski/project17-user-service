@@ -14,6 +14,7 @@
   11 refactor project directory structure
   12 move docker-compose for local environment setup to presentday config repo
   13 update readme location
+  14 refactor project directory structure to due to nested 'user-service/user-service'
 3 semantics:
   1 create user entity
   2 create user roles
