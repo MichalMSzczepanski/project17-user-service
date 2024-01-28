@@ -12,6 +12,7 @@
   9 h2 db for test profile
   10 logger configuration
   11 refactor project directory structure
+  12 move docker-compose for local environment setup to presentday config repo
 3 semantics:
   1 create user entity
   2 create user roles

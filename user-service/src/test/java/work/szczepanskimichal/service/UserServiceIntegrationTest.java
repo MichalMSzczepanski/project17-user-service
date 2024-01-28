@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import work.szczepanskimichal.entity.User;
-import work.szczepanskimichal.entity.UserDto;
 import work.szczepanskimichal.exception.AdminProgrammaticCreationException;
 import work.szczepanskimichal.exception.InvalidEmailException;
 import work.szczepanskimichal.exception.PasswordMismatchException;
