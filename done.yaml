@@ -15,13 +15,15 @@
   12 move docker-compose for local environment setup to presentday config repo
   13 update readme location
   14 refactor project directory structure to due to nested 'user-service/user-service'
+  15 change port to 8081 for service discovery
 3 semantics:
   1 create user entity
   2 create user roles
   3 create draft flow for persisting user
   4 user mapper
   5 user service crud tests
-  6 create userassembler for tests
+  6 create user assembler for tests
+  7 delete test controller
 4 logic:
   1 basic crud for users
   2 global exception handler

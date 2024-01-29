@@ -4,13 +4,12 @@
     - application variables for db connection (?)
 3 semantics:
   - password hashing prior to user persistence
-  - create user assembler for integration tests
-  - user integration tests refactor
 4 logic:
   - /register
   - /login
   - email after registration for confirmation
-  - spring validation via spring-boot-starter-validation (tbc if needed)
+  - /activate
+  - spring validation via spring-boot-starter-validation (tbc)
 
 wishlist:
   - kafka queue to notification-service with creation/update/deletion

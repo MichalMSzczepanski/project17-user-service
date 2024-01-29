@@ -1,6 +1,6 @@
 # User Service
 
-This is a Spring Boot project for managing user data, including a PostgreSQL database.
+This is a Spring Boot project for managing user data
 
 ## Prerequisites
 
@@ -8,7 +8,9 @@ This is a Spring Boot project for managing user data, including a PostgreSQL dat
 
 ## Running Locally
 
-1. spin up postgresql db
+1. spin up postgresql db from the /local directory in the config repo:
+   https://github.com/MichalMSzczepanski/project17-presentday
+- cd local
 - docker-compose up -d 
 2. run the app with maven wrapper
 - ./mvnw spring-boot:run
