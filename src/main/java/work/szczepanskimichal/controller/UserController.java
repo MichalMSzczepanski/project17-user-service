@@ -41,8 +41,4 @@ public class UserController {
         userService.deleteUser(userId);
     }
 
-    //login
-
-    //register
-
 }

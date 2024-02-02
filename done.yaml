@@ -24,6 +24,8 @@
   5 user service crud tests
   6 create user assembler for tests
   7 delete test controller
+  8 password hashing logic
+  9 create util for password hashing and holding regexes for validation
 4 logic:
   1 basic crud for users
   2 global exception handler

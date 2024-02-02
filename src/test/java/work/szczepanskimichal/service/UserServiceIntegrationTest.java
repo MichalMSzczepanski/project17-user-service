@@ -134,7 +134,7 @@ class UserServiceIntegrationTest {
 
         //then
         assertEquals(result.getPhoneNumber(), newPhoneNumber);
-        assertEquals(result.getPassword(), newPassword);
+        assertEquals(result.getPassword(), userMapper.hashPassword(newPassword));
     }
 
     @Test

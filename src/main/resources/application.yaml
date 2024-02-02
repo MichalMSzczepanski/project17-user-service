@@ -12,3 +12,10 @@ spring:
     user: postgres
     password: password
     locations: classpath:db/migration/main
+
+password:
+  hashing:
+    salt: "2b7e151628aed2a6abf7158809cf4f3c"
+
+validation:
+  emailRegex: "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"

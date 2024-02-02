@@ -1,19 +1,32 @@
 package work.szczepanskimichal.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Autowired;
 import work.szczepanskimichal.entity.UserUpdateDto;
 import work.szczepanskimichal.entity.User;
 import work.szczepanskimichal.entity.UserDto;
+import work.szczepanskimichal.service.HashingService;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public abstract class UserMapper {
 
-    User toEntity(UserDto userDto);
+    @Autowired
+    HashingService hashingservice;
 
-    UserDto toUserDto(User user);
+    @Mapping(target = "password", source = "password", qualifiedByName = "hashPassword")
+    public abstract User toEntity(UserDto userDto);
 
-    User toEntity(UserUpdateDto userUpdateDto);
+    public abstract UserDto toUserDto(User user);
 
-    UserUpdateDto toUserUpdateDto(User user);
+    public abstract UserUpdateDto toUserUpdateDto(User user);
 
+    @Mapping(target = "password", source = "password", qualifiedByName = "hashPassword")
+    public abstract User toEntity(UserUpdateDto userUpdateDto);
+
+    @Named("hashPassword")
+    public String hashPassword(String password) {
+        return hashingservice.hashPassword(password);
+    }
 }

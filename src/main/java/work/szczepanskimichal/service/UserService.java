@@ -10,6 +10,7 @@ import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
 import work.szczepanskimichal.repository.UserRepository;
 import work.szczepanskimichal.enums.Type;
+import work.szczepanskimichal.utils.ValidationUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ValidationUtil validationUtil;
 
     public UserDto createUser(UserDto userDto) {
         log.info("initiating user creation for email: {}", userDto.getEmail());
@@ -116,8 +118,7 @@ public class UserService {
     }
 
     private boolean isEmailValid(String email) {
-        var EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        var pattern = Pattern.compile(EMAIL_REGEX);
+        var pattern = Pattern.compile(validationUtil.getEmailRegex());
         var matcher = pattern.matcher(email);
         return matcher.matches();
     }

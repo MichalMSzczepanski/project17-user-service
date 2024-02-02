@@ -1,19 +1,20 @@
 1 git:
 2 config:
   - db:
-    - application variables for db connection (?)
+      - application variables for db connection (?)
 3 semantics:
-  - password hashing prior to user persistence
+  - externalize and encapsulate credentials/ hashing salt
 4 logic:
   - /register
   - /login
-  - email after registration for confirmation
   - /activate
+  - user activation logic with mongo db entity as key
+  - email after registration for confirmation
   - spring validation via spring-boot-starter-validation (tbc)
 
 wishlist:
   - kafka queue to notification-service with creation/update/deletion
-  - kafka queue to present-service to delete presents
+  - kafka queue to present-service to manage presents
   - aspects:
       - on user creation
       - on user update
