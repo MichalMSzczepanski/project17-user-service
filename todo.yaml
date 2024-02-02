@@ -1,16 +1,17 @@
-1 git:
-2 config:
-  - db:
-      - application variables for db connection (?)
-3 semantics:
-  - externalize and encapsulate credentials/ hashing salt
 4 logic:
+  - create mongo db collection with unique activation keys
+  - check for email duplication/ catch exception on user creation/ update
   - /register
   - /login
-  - /activate
   - user activation logic with mongo db entity as key
   - email after registration for confirmation
   - spring validation via spring-boot-starter-validation (tbc)
+3 semantics:
+  - externalize and encapsulate credentials/ hashing salt
+2 config:
+  - db:
+      - application variables for db connection (?)
+1 git:
 
 wishlist:
   - kafka queue to notification-service with creation/update/deletion

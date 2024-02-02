@@ -39,8 +39,26 @@ class UserServiceIntegrationTest {
         var result = userService.createUser(userDto);
 
         //then
+        var isActive = userRepository.findById(result.getId()).get().isActive();
+        assertFalse(isActive);
         assertNotNull(result.getId());
         assertEquals(Type.USER, result.getType());
+    }
+
+    @Test
+    void shouldActivateUser() {
+        //given
+        var userDto = UserAssembler.assembleRandomUserDto();
+        var user = userService.createUser(userDto);
+
+        //when
+        var changedRows = userService.activateUser(user.getId());
+
+        //then
+        assertTrue(changedRows > 0);
+        var isActive = userRepository.findById(user.getId()).get().isActive();
+        assertTrue(isActive);
+        assertEquals(Type.USER, user.getType());
     }
 
     @Test
@@ -117,7 +135,6 @@ class UserServiceIntegrationTest {
                 .email("test@example.com")
                 .password("password")
                 .phoneNumber(oldPhoneNumber)
-                .active(true)
                 .type(Type.USER)
                 .build();
         var persistedUser = userRepository.save(user);
@@ -135,6 +152,8 @@ class UserServiceIntegrationTest {
         //then
         assertEquals(result.getPhoneNumber(), newPhoneNumber);
         assertEquals(result.getPassword(), userMapper.hashPassword(newPassword));
+        var isActive = userRepository.findById(user.getId()).get().isActive();
+        assertFalse(isActive);
     }
 
     @Test

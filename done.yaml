@@ -1,32 +1,34 @@
+4 logic:
+  3 custom exceptions for user crud
+  2 global exception handler
+  1 basic crud for users
+3 semantics:
+  10 create user activation logic
+  9 create util for password hashing and holding regexes for validation
+  8 password hashing logic
+  7 delete test controller
+  6 create user assembler for tests
+  5 user service crud tests
+  4 user mapper
+  3 create draft flow for persisting user
+  2 create user roles
+  1 create user entity
+2 config:
+  15 change port to 8081 for service discovery
+  14 refactor project directory structure to due to nested 'user-service/user-service'
+  13 update readme location
+  12 move docker-compose for local environment setup to presentday config repo
+  11 refactor project directory structure
+  10 logger configuration
+  9 h2 db for test profile
+  8 test profile
+  7 add readme.md
+  6 slf4j logger
+  5 add flyway script creating user table V1__create_table_users_20240120.sql
+  4 configure flyway
+  3 initialize postgresql db for in docker-compose for local
+  2 initialize postgresql db for in docker-compose for prod
+  1 set up 'local' and 'prod' profiles
 1 git:
   1 initialize .gitignore and exclude user-service in .gitignore
-2 config:
-  1 set up 'local' and 'prod' profiles
-  2 initialize postgresql db for in docker-compose for prod
-  3 initialize postgresql db for in docker-compose for local
-  4 configure flyway
-  5 add flyway script creating user table V1__create_table_users_20240120.sql
-  6 slf4j logger
-  7 add readme.md
-  8 test profile
-  9 h2 db for test profile
-  10 logger configuration
-  11 refactor project directory structure
-  12 move docker-compose for local environment setup to presentday config repo
-  13 update readme location
-  14 refactor project directory structure to due to nested 'user-service/user-service'
-  15 change port to 8081 for service discovery
-3 semantics:
-  1 create user entity
-  2 create user roles
-  3 create draft flow for persisting user
-  4 user mapper
-  5 user service crud tests
-  6 create user assembler for tests
-  7 delete test controller
-  8 password hashing logic
-  9 create util for password hashing and holding regexes for validation
-4 logic:
-  1 basic crud for users
-  2 global exception handler
-  3 custom exceptions for user crud
+

@@ -1,5 +1,6 @@
 package work.szczepanskimichal.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,11 @@ public class UserService {
         var createdDto = userMapper.toUserDto(userRepository.save(userMapper.toEntity(userDto)));
         log.info("successfully created user. user id: {}", createdDto.getId());
         return createdDto;
+    }
+
+    @Transactional
+    public int activateUser(UUID userId) {
+        return userRepository.activateUser(userId);
     }
 
     public UserDto getUser(UUID userId) {

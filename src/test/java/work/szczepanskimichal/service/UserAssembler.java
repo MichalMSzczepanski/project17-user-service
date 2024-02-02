@@ -23,7 +23,6 @@ public abstract class UserAssembler {
                 .email(generateRandomEmail())
                 .password(password)
                 .passwordConfirmation(password)
-                .active(true)
                 .phoneNumber(generateRandomPhoneNumber())
                 .type(Type.USER)
                 .build();
