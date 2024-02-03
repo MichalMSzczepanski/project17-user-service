@@ -28,6 +28,9 @@ public class UserService {
 
     public UserDto createUser(UserDto userDto) {
         log.info("initiating user creation for email: {}", userDto.getEmail());
+        if (userRepository.userWithEmailExists(userDto.getEmail()) > 0) {
+            throw new EmailDuplicationException(userDto.getEmail());
+        }
         validateUserFields(userDto);
         var createdDto = userMapper.toUserDto(userRepository.save(userMapper.toEntity(userDto)));
         log.info("successfully created user. user id: {}", createdDto.getId());

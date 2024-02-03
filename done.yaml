@@ -3,6 +3,7 @@
   2 global exception handler
   1 basic crud for users
 3 semantics:
+  11 validate user email duplication
   10 create user activation logic
   9 create util for password hashing and holding regexes for validation
   8 password hashing logic

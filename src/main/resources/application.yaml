@@ -6,11 +6,11 @@ spring:
     active: local
   datasource:
     username: postgres
-    password: password
+    password: postgres_password
     driver-class-name: org.postgresql.Driver
   flyway:
     user: postgres
-    password: password
+    password: postgres_password
     locations: classpath:db/migration/main
 
 password:

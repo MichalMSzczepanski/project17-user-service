@@ -6,13 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import work.szczepanskimichal.entity.User;
-import work.szczepanskimichal.exception.AdminProgrammaticCreationException;
-import work.szczepanskimichal.exception.InvalidEmailException;
-import work.szczepanskimichal.exception.PasswordMismatchException;
+import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
 import work.szczepanskimichal.repository.UserRepository;
 import work.szczepanskimichal.enums.Type;
-import work.szczepanskimichal.exception.MissingFieldException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,6 +66,16 @@ class UserServiceIntegrationTest {
 
         //when-then
         assertThrows(PasswordMismatchException.class, () -> userService.createUser(corruptedUserDto));
+    }
+
+    @Test
+    void shouldThrowEmailDuplicationException_onUserCreation() {
+        //given
+        var userDto = UserAssembler.assembleRandomUserDto();
+        userRepository.save(userMapper.toEntity(userDto));
+
+        //when-then
+        assertThrows(EmailDuplicationException.class, () -> userService.createUser(userDto));
     }
 
     @Test

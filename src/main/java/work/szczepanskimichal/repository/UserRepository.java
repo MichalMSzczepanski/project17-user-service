@@ -12,8 +12,11 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+    @Query("SELECT COUNT(u) FROM User u WHERE u.email = :email")
+    int userWithEmailExists(@Param("email") String email);
+
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE User s SET s.active = true WHERE s.id = :id")
+    @Query("UPDATE User u SET u.active = true WHERE u.id = :id")
     int activateUser(@Param("id") UUID id);
 
 }
