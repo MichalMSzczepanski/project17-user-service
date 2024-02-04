@@ -12,6 +12,13 @@ spring:
     user: postgres
     password: postgres_password
     locations: classpath:db/migration/main
+  data:
+    mongodb:
+      port: 27017
+      database: activation_keys
+      username: mongo
+      password: mongo_password
+      authentication-database: admin
 
 password:
   hashing:

@@ -3,6 +3,7 @@
   2 global exception handler
   1 basic crud for users
 3 semantics:
+  12 add activation key logic with mongo
   11 validate user email duplication
   10 create user activation logic
   9 create util for password hashing and holding regexes for validation
@@ -15,6 +16,7 @@
   2 create user roles
   1 create user entity
 2 config:
+  16 add mongo db for prod, local and embedded test
   15 change port to 8081 for service discovery
   14 refactor project directory structure to due to nested 'user-service/user-service'
   13 update readme location

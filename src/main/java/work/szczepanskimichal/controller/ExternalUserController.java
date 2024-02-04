@@ -14,13 +14,12 @@ public class ExternalUserController {
 
     //login
 
-
     //register
 
     //forgotPassword
 
-    @PatchMapping("/activate/{id}")
-    void activateUser(@PathVariable("id") UUID userId) {
-        userService.activateUser(userId);
+    @PatchMapping("/activate/{userId}/{activationKey}")
+    void activateUser(@PathVariable("userId") UUID userId, @PathVariable("activationKey") UUID activationKey) {
+        userService.activateUser(userId, activationKey);
     }
 }

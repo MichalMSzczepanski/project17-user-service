@@ -1,13 +1,17 @@
 package work.szczepanskimichal.service;
 
+import de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import work.szczepanskimichal.entity.User;
 import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
+import work.szczepanskimichal.repository.ActivationKeyRepository;
 import work.szczepanskimichal.repository.UserRepository;
 import work.szczepanskimichal.enums.Type;
 
@@ -16,7 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-class UserServiceIntegrationTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Import(EmbeddedMongoAutoConfiguration.class)
+class UserServiceIntegrationTest  {
 
     @Autowired
     private UserRepository userRepository;
@@ -26,6 +32,9 @@ class UserServiceIntegrationTest {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ActivationKeyRepository activationKeyRepository;
 
     @Test
     void shouldCreateUser() {
@@ -47,15 +56,19 @@ class UserServiceIntegrationTest {
         //given
         var userDto = UserAssembler.assembleRandomUserDto();
         var user = userService.createUser(userDto);
+        var activationKeyOptional = activationKeyRepository.getKeyByUserId(user.getId());
+        var activationKey = activationKeyOptional.get();
 
         //when
-        var changedRows = userService.activateUser(user.getId());
+        var changedRows = userService.activateUser(user.getId(), activationKey.getKey());
 
         //then
         assertTrue(changedRows > 0);
         var isActive = userRepository.findById(user.getId()).get().isActive();
         assertTrue(isActive);
         assertEquals(Type.USER, user.getType());
+        var activationKeyAfterActivation = activationKeyRepository.getKeyByUserId(user.getId());
+        assertTrue(activationKeyAfterActivation.isEmpty());
     }
 
     @Test

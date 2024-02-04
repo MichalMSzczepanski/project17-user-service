@@ -14,7 +14,8 @@ public class UserDto implements UserDAO {
     private String email;
     private String password;
     private String passwordConfirmation;
-    private String phoneNumber;
     private Type type;
+    private boolean active;
+    private String phoneNumber;
 
 }

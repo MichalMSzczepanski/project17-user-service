@@ -6,6 +6,7 @@
   - user activation logic with mongo db entity as key
   - email after registration for confirmation
   - spring validation via spring-boot-starter-validation (tbc)
+  - job for expired activation keys (24h from creation date)
 3 semantics:
   - externalize and encapsulate credentials/ hashing salt
 2 config:

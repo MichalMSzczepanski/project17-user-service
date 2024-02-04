@@ -25,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final ValidationUtil validationUtil;
+    private final ActivationKeyService activationKeyService;
 
     public UserDto createUser(UserDto userDto) {
         log.info("initiating user creation for email: {}", userDto.getEmail());
@@ -33,12 +34,14 @@ public class UserService {
         }
         validateUserFields(userDto);
         var createdDto = userMapper.toUserDto(userRepository.save(userMapper.toEntity(userDto)));
+        activationKeyService.assignActivationKeyToUser(createdDto.getId());
         log.info("successfully created user. user id: {}", createdDto.getId());
         return createdDto;
     }
 
     @Transactional
-    public int activateUser(UUID userId) {
+    public int activateUser(UUID userId, UUID activationKey) {
+        activationKeyService.findByActivationKeyAndUserIdAndDelete(activationKey, userId);
         return userRepository.activateUser(userId);
     }
 

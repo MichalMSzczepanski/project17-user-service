@@ -3,3 +3,6 @@ spring:
     url: jdbc:postgresql://postgres:5432/users
   flyway:
     url: jdbc:postgresql://postgres:5432/users
+  data:
+    mongodb:
+      host: mongo

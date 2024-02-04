@@ -3,6 +3,9 @@ spring:
     url: jdbc:postgresql://localhost:5433/users
   flyway:
     url: jdbc:postgresql://localhost:5433/users
+  data:
+    mongodb:
+      host: localhost
 
 logging:
   level:
