@@ -1,13 +1,14 @@
 4 logic:
-  - create mongo db collection with unique activation keys
-  - check for email duplication/ catch exception on user creation/ update
   - /register
   - /login
-  - user activation logic with mongo db entity as key
   - email after registration for confirmation
   - spring validation via spring-boot-starter-validation (tbc)
   - job for expired activation keys (24h from creation date)
 3 semantics:
+  - patch/activate should return more than 200
+  - mock sending message via kafka to notification-service with email for verification
+  - split InvalidActivationKeyException into not found with 404 and an actual error
+  - update DTO for creation (does not take in "active")
   - externalize and encapsulate credentials/ hashing salt
 2 config:
   - db:

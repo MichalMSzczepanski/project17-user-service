@@ -16,6 +16,7 @@
   2 create user roles
   1 create user entity
 2 config:
+  17 working prod/ local for mongo/ postgres
   16 add mongo db for prod, local and embedded test
   15 change port to 8081 for service discovery
   14 refactor project directory structure to due to nested 'user-service/user-service'

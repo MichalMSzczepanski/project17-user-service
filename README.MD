@@ -8,7 +8,7 @@ This is a Spring Boot project for managing user data
 
 ## Running Locally
 
-1. spin up postgresql db from the /local directory in the config repo:
+1. spin up local stack (postgres, mongo) from the /local directory in the config repo:
    https://github.com/MichalMSzczepanski/project17-presentday
 - cd local
 - docker-compose up -d 
