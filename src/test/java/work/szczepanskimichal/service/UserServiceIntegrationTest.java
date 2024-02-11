@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import work.szczepanskimichal.entity.User;
+import work.szczepanskimichal.entity.UserUpdatePasswordDto;
 import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
 import work.szczepanskimichal.repository.ActivationKeyRepository;
@@ -22,19 +23,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Import(EmbeddedMongoAutoConfiguration.class)
-class UserServiceIntegrationTest  {
+class UserServiceIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private ActivationKeyRepository activationKeyRepository;
+    @Autowired
+    private HashingService hashingService;
 
     @Test
     void shouldCreateUser() {
@@ -170,6 +170,51 @@ class UserServiceIntegrationTest  {
         assertEquals(result.getPhoneNumber(), newPhoneNumber);
         var isActive = userRepository.findById(user.getId()).get().isActive();
         assertFalse(isActive);
+    }
+
+    @Test
+    void shouldUpdateUsersPassword() {
+        //given
+        var currentPassword = "password";
+        var user = UserAssembler.assembleRandomUser();
+        user = UserAssembler.hashUserPassword(user, hashingService, currentPassword);
+        var persistedUser = userRepository.save(user);
+
+        //when
+        var newPassword = "changedPassword";
+        var userDtoWithNewPassword = UserUpdatePasswordDto.builder()
+                .currentPassword(currentPassword)
+                .newPassword(newPassword)
+                .newPasswordConfirmation(newPassword)
+                .build();
+        userService.updatePassword(persistedUser.getId(), userDtoWithNewPassword);
+
+        //then
+        var newPasswordHashedExplicitly = hashingService.hashPassword(newPassword);
+        var userPasswordAfterPasswordUpdate = userRepository.findPasswordById(persistedUser.getId());
+        assertEquals(newPasswordHashedExplicitly, userPasswordAfterPasswordUpdate);
+    }
+
+    @Test
+    void shouldNotUpdateUsersPassword_dueToInvalidPasswordException() {
+        //given
+        var currentPassword = "password";
+        var user = UserAssembler.assembleRandomUser();
+        user = UserAssembler.hashUserPassword(user, hashingService, currentPassword);
+        var persistedUser = userRepository.save(user);
+        var userId = persistedUser.getId();
+
+        //when
+        var newPassword = "changedPassword";
+        var userDtoWithNewPassword = UserUpdatePasswordDto.builder()
+                .currentPassword("currentPasswordWithTypo")
+                .newPassword(newPassword)
+                .newPasswordConfirmation(newPassword)
+                .build();
+
+        //then
+        assertThrows(InvalidPasswordException.class, () -> userService.updatePassword(userId,
+                userDtoWithNewPassword));
     }
 
     @Test

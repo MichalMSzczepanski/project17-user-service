@@ -1,13 +1,11 @@
 package work.szczepanskimichal.service;
 
+import com.mongodb.MongoException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import work.szczepanskimichal.entity.User;
-import work.szczepanskimichal.entity.UserCreateDto;
-import work.szczepanskimichal.entity.UserDto;
-import work.szczepanskimichal.entity.UserUpdateDto;
+import work.szczepanskimichal.entity.*;
 import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
 import work.szczepanskimichal.repository.UserRepository;
@@ -27,22 +25,36 @@ public class UserService {
     private final UserMapper userMapper;
     private final ValidationUtil validationUtil;
     private final ActivationKeyService activationKeyService;
+    private final HashingService hashingService;
 
+    @Transactional
     public UserDto createUser(UserCreateDto userCreateDto) {
-        log.info("initiating user creation for email: {}", userCreateDto.getEmail());
+        log.info("Initiating user creation for email: {}", userCreateDto.getEmail());
         if (userRepository.userWithEmailExists(userCreateDto.getEmail()) > 0) {
             throw new EmailDuplicationException(userCreateDto.getEmail());
         }
         validateUserFields(userCreateDto);
         var createdDto = userMapper.toUserDto(userRepository.save(userMapper.toEntity(userCreateDto)));
-        activationKeyService.assignActivationKeyToUser(createdDto.getId(), createdDto.getEmail());
-        log.info("successfully created user. user id: {}", createdDto.getId());
+        try {
+            activationKeyService.assignActivationKeyToUser(createdDto.getId(), createdDto.getEmail());
+        } catch (MongoException e) {
+            userRepository.deleteById(createdDto.getId());
+            log.error("Failed to create user due to activation key issue. Rolled back user creation: {}",
+                    createdDto.getId());
+            throw new ActivationKeyException(e.getMessage());
+        }
+        log.info("Successfully created user. user id: {}", createdDto.getId());
         return createdDto;
     }
 
     @Transactional
     public int activateUser(UUID userId, UUID activationKey) {
-        activationKeyService.findByActivationKeyAndUserIdAndDelete(activationKey, userId);
+        try {
+            activationKeyService.findByActivationKeyAndUserIdAndDelete(activationKey, userId);
+        } catch (MongoException e) {
+            log.error("Failed to manage user activation key.", userId);
+            throw new ActivationKeyException(e.getMessage());
+        }
         return userRepository.activateUser(userId);
     }
 
@@ -60,11 +72,18 @@ public class UserService {
                 .toList();
     }
 
+    @Transactional
     public UserDto updateUser(UUID userId, UserUpdateDto userUpdateDto) {
         var user = userExists(userId);
         validateType(userUpdateDto.getType());
         if (!user.getEmail().equals(userUpdateDto.getEmail()) && isEmailAvailable(userUpdateDto.getEmail())) {
-            activationKeyService.assignActivationKeyToUser(userId, userUpdateDto.getEmail());
+            try {
+                activationKeyService.assignActivationKeyToUser(userId, userUpdateDto.getEmail());
+            } catch (MongoException e) {
+                log.error("Failed to update user due to activation key issue. Terminating user update.",
+                        userId);
+                throw new ActivationKeyException(e.getMessage());
+            }
         }
         validateEmail(userUpdateDto.getEmail());
         var updatedUser =
@@ -75,12 +94,20 @@ public class UserService {
         return userMapper.toUserDto(userRepository.save(updatedUser));
     }
 
-//    public UserCreateDto updatePassword(UUID userId, UserUpdatePasswordDto userUpdateDto) {
-//    }
+    @Transactional
+    public void updatePassword(UUID userId, UserUpdatePasswordDto userUpdateDto) {
+        validatePasswords(userUpdateDto.getNewPassword(), userUpdateDto.getNewPasswordConfirmation());
+        var hashedCurrentPassword = userRepository.findPasswordById(userId);
+        var hashedConfirmationPassword = hashingService.hashPassword(userUpdateDto.getCurrentPassword());
+        if (!hashedCurrentPassword.equals(hashedConfirmationPassword)) {
+            throw new InvalidPasswordException();
+        }
+        userRepository.updatePassword(userId, hashingService.hashPassword(userUpdateDto.getNewPassword()));
+    }
 
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
-        log.info("successfully deleted user with id: {}", userId);
+        log.info("Successfully deleted user with id: {}", userId);
     }
 
     private User userExists(UUID userId) {
@@ -133,5 +160,4 @@ public class UserService {
         var matcher = pattern.matcher(email);
         return matcher.matches();
     }
-
 }

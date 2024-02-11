@@ -1,11 +1,13 @@
 5 fixes:
   <not tracked>
 4 logic:
+  5 encapsulate password update logic
   4 update user creation and update logic for authentication
   3 custom exceptions for user crud
   2 global exception handler
   1 basic crud for users
 3 semantics:
+  13 catch mongo exceptions for user creation, activation and update in case rollback needed
   12 add activation key logic with mongo
   11 validate user email duplication
   10 create user activation logic

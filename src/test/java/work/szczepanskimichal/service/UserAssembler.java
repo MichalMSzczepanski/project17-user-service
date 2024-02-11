@@ -36,6 +36,12 @@ public abstract class UserAssembler {
         return RandomStringUtils.randomAlphanumeric(10);
     }
 
+    public static User hashUserPassword(User user, HashingService hashingService, String password) {
+        return user.toBuilder()
+                .password(hashingService.hashPassword(password))
+                .build();
+    }
+
     private static String generateRandomPhoneNumber() {
         return "+48" + RandomStringUtils.randomNumeric(9);
     }

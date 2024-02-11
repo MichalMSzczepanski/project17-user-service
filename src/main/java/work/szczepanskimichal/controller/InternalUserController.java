@@ -1,10 +1,12 @@
 package work.szczepanskimichal.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.entity.UserCreateDto;
 import work.szczepanskimichal.entity.UserDto;
 import work.szczepanskimichal.entity.UserUpdateDto;
+import work.szczepanskimichal.entity.UserUpdatePasswordDto;
 import work.szczepanskimichal.service.UserService;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class InternalUserController {
     private final UserService userService;
 
     @PostMapping("")
-    public UserDto create(@RequestBody UserCreateDto userCreateDto) {
-        return userService.createUser(userCreateDto);
+    public UserDto create(@RequestBody UserCreateDto userDto) {
+        return userService.createUser(userDto);
     }
 
     @GetMapping("/{userId}")
@@ -32,18 +34,21 @@ public class InternalUserController {
         return userService.getAllUsers();
     }
 
-    @PatchMapping("/{userId}")
-    public UserDto patch(@PathVariable UUID userId, @RequestBody UserUpdateDto userUpdateDto) {
-        return userService.updateUser(userId, userUpdateDto);
+    @PatchMapping("/update/{userId}")
+    public UserDto update(@PathVariable UUID userId, @RequestBody UserUpdateDto userDto) {
+        return userService.updateUser(userId, userDto);
     }
 
-//    @PatchMapping("/{userId}")
-//    public UserCreateDto patch(@PathVariable UUID userId, @RequestBody UserUpdatePasswordDto userUpdateDto) {
-//        return userService.updatePassword(userId, userUpdateDto);
-//    }
+    @PatchMapping("/update-password/{userId}")
+    public ResponseEntity<String> updatePassword(@PathVariable UUID userId,
+                                                 @RequestBody UserUpdatePasswordDto userDto) {
+        userService.updatePassword(userId, userDto);
+        return ResponseEntity.ok("Password updated successfully");
+    }
 
     @DeleteMapping("/{userId}")
-    public void delete(@PathVariable UUID userId) {
+    public ResponseEntity<String> delete(@PathVariable UUID userId) {
         userService.deleteUser(userId);
+        return ResponseEntity.ok("User deleted successfully");
     }
 }
