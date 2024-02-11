@@ -21,13 +21,14 @@ public class ActivationKeyService {
         return activationKeyRepository.getKeyByUserId(userId).orElseThrow(() -> new InvalidActivationKeyException(userId));
     }
 
-    public ActivationKey assignActivationKeyToUser(UUID userId) {
+    public ActivationKey assignActivationKeyToUser(UUID userId, String email) {
         var newKey = ActivationKey.builder()
                 .key(UUID.randomUUID())
                 .userId(userId)
                 .creationDate(LocalDateTime.now())
                 .build();
         var key = activationKeyRepository.save(newKey);
+        //email user with activation key
         log.info("Successfully created activation key for user: {}", userId);
         return key;
     }

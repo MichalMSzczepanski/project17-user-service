@@ -148,7 +148,7 @@ class UserServiceIntegrationTest  {
     }
 
     @Test
-    void shouldUpdateUser() {
+    void shouldUpdateUsersPhoneNumber() {
         //given
         var oldPhoneNumber = "1234567890";
         var user = User.builder()
@@ -161,17 +161,13 @@ class UserServiceIntegrationTest  {
 
         //when
         var newPhoneNumber = "0987654321";
-        var newPassword = "pass";
         var updatedUser = userMapper.toUserUpdateDto(persistedUser).toBuilder()
-                .password(newPassword)
-                .passwordConfirmation(newPassword)
                 .phoneNumber(newPhoneNumber)
                 .build();
         var result = userService.updateUser(persistedUser.getId(), updatedUser);
 
         //then
         assertEquals(result.getPhoneNumber(), newPhoneNumber);
-        assertEquals(result.getPassword(), userMapper.hashPassword(newPassword));
         var isActive = userRepository.findById(user.getId()).get().isActive();
         assertFalse(isActive);
     }

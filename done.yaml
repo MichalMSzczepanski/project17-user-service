@@ -1,4 +1,7 @@
+5 fixes:
+  <not tracked>
 4 logic:
+  4 update user creation and update logic for authentication
   3 custom exceptions for user crud
   2 global exception handler
   1 basic crud for users
@@ -16,6 +19,7 @@
   2 create user roles
   1 create user entity
 2 config:
+  18 update user entity flyway script for less non-nulls
   17 working prod/ local for mongo/ postgres
   16 add mongo db for prod, local and embedded test
   15 change port to 8081 for service discovery

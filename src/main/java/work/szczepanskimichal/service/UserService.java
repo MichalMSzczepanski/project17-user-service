@@ -4,7 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import work.szczepanskimichal.entity.UserDAO;
+import work.szczepanskimichal.entity.User;
+import work.szczepanskimichal.entity.UserCreateDto;
 import work.szczepanskimichal.entity.UserDto;
 import work.szczepanskimichal.entity.UserUpdateDto;
 import work.szczepanskimichal.exception.*;
@@ -27,14 +28,14 @@ public class UserService {
     private final ValidationUtil validationUtil;
     private final ActivationKeyService activationKeyService;
 
-    public UserDto createUser(UserDto userDto) {
-        log.info("initiating user creation for email: {}", userDto.getEmail());
-        if (userRepository.userWithEmailExists(userDto.getEmail()) > 0) {
-            throw new EmailDuplicationException(userDto.getEmail());
+    public UserDto createUser(UserCreateDto userCreateDto) {
+        log.info("initiating user creation for email: {}", userCreateDto.getEmail());
+        if (userRepository.userWithEmailExists(userCreateDto.getEmail()) > 0) {
+            throw new EmailDuplicationException(userCreateDto.getEmail());
         }
-        validateUserFields(userDto);
-        var createdDto = userMapper.toUserDto(userRepository.save(userMapper.toEntity(userDto)));
-        activationKeyService.assignActivationKeyToUser(createdDto.getId());
+        validateUserFields(userCreateDto);
+        var createdDto = userMapper.toUserDto(userRepository.save(userMapper.toEntity(userCreateDto)));
+        activationKeyService.assignActivationKeyToUser(createdDto.getId(), createdDto.getEmail());
         log.info("successfully created user. user id: {}", createdDto.getId());
         return createdDto;
     }
@@ -47,16 +48,10 @@ public class UserService {
 
     public UserDto getUser(UUID userId) {
         if (userId == null) {
-            log.error("missing field: user id");
             throw new MissingFieldException("user id");
         }
-        var userOptional = userRepository.findById(userId);
-        if (userOptional.isEmpty()) {
-            log.error("user with id: {} not found", userId);
-            throw new UserNotFoundException(userId);
-        } else {
-            return userMapper.toUserDto(userOptional.get());
-        }
+        var user = userExists(userId);
+        return userMapper.toUserDto(user);
     }
 
     public List<UserDto> getAllUsers() {
@@ -66,55 +61,52 @@ public class UserService {
     }
 
     public UserDto updateUser(UUID userId, UserUpdateDto userUpdateDto) {
-        var userOptional = userRepository.findById(userId);
-        if (userOptional.isEmpty()) {
-            log.error("user with id: {} not found", userId);
-            throw new UserNotFoundException(userId);
-        } else {
-            validateUserFields(userUpdateDto);
-            var userEntity = userOptional.get();
-            var updatedUser =
-                    userMapper.toEntity(userUpdateDto).toBuilder()
-                            .id(userId)
-                            .createdAt(userEntity.getCreatedAt())
-                            .build();
-            return userMapper.toUserDto(userRepository.save(updatedUser));
+        var user = userExists(userId);
+        validateType(userUpdateDto.getType());
+        if (!user.getEmail().equals(userUpdateDto.getEmail()) && isEmailAvailable(userUpdateDto.getEmail())) {
+            activationKeyService.assignActivationKeyToUser(userId, userUpdateDto.getEmail());
         }
+        validateEmail(userUpdateDto.getEmail());
+        var updatedUser =
+                userMapper.toEntity(userUpdateDto).toBuilder()
+                        .id(userId)
+                        .active(false)
+                        .build();
+        return userMapper.toUserDto(userRepository.save(updatedUser));
     }
+
+//    public UserCreateDto updatePassword(UUID userId, UserUpdatePasswordDto userUpdateDto) {
+//    }
 
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
         log.info("successfully deleted user with id: {}", userId);
     }
 
-    private void validateUserFields(UserDAO userDto) {
-        validateType(userDto);
-        validateEmail(userDto.getEmail());
-        validatePassword(userDto);
+    private User userExists(UUID userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    private void validateType(UserDAO userDto) {
-        var type = userDto.getType();
+    private void validateUserFields(UserCreateDto userDto) {
+        validateType(userDto.getType());
+        validateEmail(userDto.getEmail());
+        validatePasswords(userDto.getPassword(), userDto.getPasswordConfirmation());
+    }
+
+    private void validateType(Type type) {
         if (type == null) {
-            log.error("missing field: type");
             throw new MissingFieldException("user type");
         }
         if (type.equals(Type.ADMIN)) {
-            log.error("attempt to create admin. for user with email: {}",
-                    userDto.getEmail());
             throw new AdminProgrammaticCreationException();
         }
     }
 
-    private void validatePassword(UserDAO userDto) {
-        var password = userDto.getPassword();
-        var passwordConfirmation = userDto.getPasswordConfirmation();
+    private void validatePasswords(String password, String passwordConfirmation) {
         if (password == null || password.isEmpty() || passwordConfirmation == null || passwordConfirmation.isEmpty()) {
-            log.error("missing field: password");
             throw new MissingFieldException("user password");
         }
-        if (!userDto.getPassword().equals(userDto.getPasswordConfirmation())) {
-            log.error("passwords do not match. attempted by user with email: {}", userDto.getEmail());
+        if (!password.equals(passwordConfirmation)) {
             throw new PasswordMismatchException();
         }
     }
@@ -127,6 +119,13 @@ public class UserService {
         if (!isEmailValid(email)) {
             throw new InvalidEmailException();
         }
+    }
+
+    private boolean isEmailAvailable(String email) {
+        if (userRepository.userWithEmailExists(email) > 0) {
+            throw new EmailDuplicationException(email);
+        }
+        return true;
     }
 
     private boolean isEmailValid(String email) {

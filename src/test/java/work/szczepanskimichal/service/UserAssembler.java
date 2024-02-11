@@ -2,7 +2,7 @@ package work.szczepanskimichal.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import work.szczepanskimichal.entity.User;
-import work.szczepanskimichal.entity.UserDto;
+import work.szczepanskimichal.entity.UserCreateDto;
 import work.szczepanskimichal.enums.Type;
 
 public abstract class UserAssembler {
@@ -17,9 +17,9 @@ public abstract class UserAssembler {
                 .build();
     }
 
-    public static UserDto assembleRandomUserDto() {
+    public static UserCreateDto assembleRandomUserDto() {
         var password = generateRandomPassword();
-        return UserDto.builder()
+        return UserCreateDto.builder()
                 .email(generateRandomEmail())
                 .password(password)
                 .passwordConfirmation(password)

@@ -8,10 +8,12 @@ import java.util.UUID;
 
 @Builder(toBuilder = true)
 @Getter
-public class UserDto {
+public class UserCreateDto {
 
     private UUID id;
     private String email;
+    private String password;
+    private String passwordConfirmation;
     private Type type;
     private boolean active;
     private String phoneNumber;

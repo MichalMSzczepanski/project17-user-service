@@ -6,12 +6,9 @@ import work.szczepanskimichal.enums.Type;
 
 @Builder(toBuilder = true)
 @Getter
-public class UserUpdateDto implements UserDAO {
+public class UserUpdateDto {
 
     private String email;
-    private String password;
-    private String passwordConfirmation;
-    private boolean active;
     private String phoneNumber;
     private Type type;
 

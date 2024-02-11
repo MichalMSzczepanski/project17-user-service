@@ -4,16 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 import work.szczepanskimichal.enums.Type;
 
-import java.util.UUID;
-
 @Builder(toBuilder = true)
 @Getter
-public class UserDto {
+public class UserUpdatePasswordDto {
 
-    private UUID id;
     private String email;
-    private Type type;
     private boolean active;
     private String phoneNumber;
+    private Type type;
 
 }
