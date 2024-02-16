@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import work.szczepanskimichal.entity.User;
+import work.szczepanskimichal.model.User;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -19,12 +20,17 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("UPDATE User u SET u.active = true WHERE u.id = :id")
     int activateUser(@Param("id") UUID id);
 
-    @Query("SELECT u.password FROM User u WHERE u.id = :id")
-    String findPasswordById(@Param("id") UUID userId);
+    @Query("SELECT u.active FROM User u WHERE u.email = :email")
+    boolean isUserActive(@Param("email") String email);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE User u SET u.password = :password WHERE u.id = :id")
-    int updatePassword(@Param("id") UUID id, @Param("password") String password);
+    @Query("UPDATE User u SET u.password = :password WHERE u.email  = :email")
+    int updatePasswordByEmail(@Param("email") String email, @Param("password") String password);
 
+    @Query("SELECT u.password FROM User u WHERE u.email = :email")
+    Optional<String> findPasswordByEmail(@Param("email") String email);
+
+    @Query("SELECT u.id FROM User u WHERE u.email = :email")
+    Optional<UUID> findIdByEmail(@Param("email") String email);
 
 }

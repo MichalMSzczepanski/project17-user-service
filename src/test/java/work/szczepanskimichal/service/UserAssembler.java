@@ -1,8 +1,8 @@
 package work.szczepanskimichal.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import work.szczepanskimichal.entity.User;
-import work.szczepanskimichal.entity.UserCreateDto;
+import work.szczepanskimichal.model.User;
+import work.szczepanskimichal.model.UserCreateDto;
 import work.szczepanskimichal.enums.Type;
 
 public abstract class UserAssembler {

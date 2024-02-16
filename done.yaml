@@ -1,6 +1,7 @@
 5 fixes:
   <not tracked>
 4 logic:
+  6 login, register, password reset and password set
   5 encapsulate password update logic
   4 update user creation and update logic for authentication
   3 custom exceptions for user crud

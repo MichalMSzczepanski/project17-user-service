@@ -1,7 +1,7 @@
 package work.szczepanskimichal.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import work.szczepanskimichal.entity.ActivationKey;
+import work.szczepanskimichal.model.ActivationKey;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -10,9 +10,9 @@ public interface ActivationKeyRepository extends MongoRepository<ActivationKey, 
 
     Optional<ActivationKey> getKeyByUserId(UUID userId);
 
-    Optional<ActivationKey> findByKeyAndUserId(UUID activationKey, UUID userId);
+    int deleteByKeyAndUserId(UUID activationKey, UUID userId);
 
-    void deleteByKeyAndUserId(UUID activationKey, UUID userId);
+    boolean existsByKeyAndUserId(UUID activationKey, UUID userId);
 
 }
 

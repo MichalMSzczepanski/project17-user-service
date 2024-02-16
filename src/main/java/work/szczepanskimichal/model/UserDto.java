@@ -1,4 +1,4 @@
-package work.szczepanskimichal.entity;
+package work.szczepanskimichal.model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +8,13 @@ import java.util.UUID;
 
 @Builder(toBuilder = true)
 @Getter
-public class UserCreateDto {
+public class UserDto {
 
     private UUID id;
     private String email;
-    private String password;
-    private String passwordConfirmation;
     private Type type;
     private boolean active;
     private String phoneNumber;
+    private UUID activationKey;
 
 }

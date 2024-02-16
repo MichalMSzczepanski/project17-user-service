@@ -1,4 +1,4 @@
-package work.szczepanskimichal.entity;
+package work.szczepanskimichal.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

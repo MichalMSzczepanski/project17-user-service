@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import work.szczepanskimichal.entity.User;
-import work.szczepanskimichal.entity.UserUpdatePasswordDto;
+import work.szczepanskimichal.model.User;
+import work.szczepanskimichal.model.UserUpdatePasswordDto;
 import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
 import work.szczepanskimichal.repository.ActivationKeyRepository;
@@ -187,11 +187,11 @@ class UserServiceIntegrationTest {
                 .newPassword(newPassword)
                 .newPasswordConfirmation(newPassword)
                 .build();
-        userService.updatePassword(persistedUser.getId(), userDtoWithNewPassword);
+        userService.updatePassword(persistedUser.getEmail(), userDtoWithNewPassword);
 
         //then
         var newPasswordHashedExplicitly = hashingService.hashPassword(newPassword);
-        var userPasswordAfterPasswordUpdate = userRepository.findPasswordById(persistedUser.getId());
+        var userPasswordAfterPasswordUpdate = userRepository.findPasswordByEmail(persistedUser.getEmail()).get();
         assertEquals(newPasswordHashedExplicitly, userPasswordAfterPasswordUpdate);
     }
 
@@ -202,7 +202,7 @@ class UserServiceIntegrationTest {
         var user = UserAssembler.assembleRandomUser();
         user = UserAssembler.hashUserPassword(user, hashingService, currentPassword);
         var persistedUser = userRepository.save(user);
-        var userId = persistedUser.getId();
+        var email = persistedUser.getEmail();
 
         //when
         var newPassword = "changedPassword";
@@ -213,7 +213,7 @@ class UserServiceIntegrationTest {
                 .build();
 
         //then
-        assertThrows(InvalidPasswordException.class, () -> userService.updatePassword(userId,
+        assertThrows(InvalidPasswordException.class, () -> userService.updatePassword(email,
                 userDtoWithNewPassword));
     }
 

@@ -1,13 +1,13 @@
-package work.szczepanskimichal.entity;
+package work.szczepanskimichal.model;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder(toBuilder = true)
 @Getter
-public class UserUpdatePasswordDto {
+public class UserResetPasswordDto {
 
-    private String currentPassword;
+    private String email;
     private String newPassword;
     private String newPasswordConfirmation;
 

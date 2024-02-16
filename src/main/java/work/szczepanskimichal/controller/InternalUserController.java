@@ -3,10 +3,10 @@ package work.szczepanskimichal.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import work.szczepanskimichal.entity.UserCreateDto;
-import work.szczepanskimichal.entity.UserDto;
-import work.szczepanskimichal.entity.UserUpdateDto;
-import work.szczepanskimichal.entity.UserUpdatePasswordDto;
+import work.szczepanskimichal.model.UserCreateDto;
+import work.szczepanskimichal.model.UserDto;
+import work.szczepanskimichal.model.UserUpdateDto;
+import work.szczepanskimichal.model.UserUpdatePasswordDto;
 import work.szczepanskimichal.service.UserService;
 
 import java.util.List;
@@ -39,16 +39,16 @@ public class InternalUserController {
         return userService.updateUser(userId, userDto);
     }
 
-    @PatchMapping("/update-password/{userId}")
-    public ResponseEntity<String> updatePassword(@PathVariable UUID userId,
+    @PatchMapping("/update-password/{email}")
+    public ResponseEntity<String> updatePassword(@PathVariable String email,
                                                  @RequestBody UserUpdatePasswordDto userDto) {
-        userService.updatePassword(userId, userDto);
-        return ResponseEntity.ok("Password updated successfully");
+        userService.updatePassword(email, userDto);
+        return ResponseEntity.ok("Successfully updated password");
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> delete(@PathVariable UUID userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok("User deleted successfully");
+        return ResponseEntity.ok("Successfully deleted user");
     }
 }
