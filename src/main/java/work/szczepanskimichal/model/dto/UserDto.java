@@ -1,4 +1,4 @@
-package work.szczepanskimichal.model;
+package work.szczepanskimichal.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +15,6 @@ public class UserDto {
     private Type type;
     private boolean active;
     private String phoneNumber;
-    private UUID activationKey;
+    private UUID secretKey;
 
 }

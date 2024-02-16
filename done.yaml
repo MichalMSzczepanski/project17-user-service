@@ -1,6 +1,7 @@
 5 fixes:
   <not tracked>
 4 logic:
+  7 login, register, password reset and password set refactor
   6 login, register, password reset and password set
   5 encapsulate password update logic
   4 update user creation and update logic for authentication
@@ -8,6 +9,7 @@
   2 global exception handler
   1 basic crud for users
 3 semantics:
+  14 refactor ActivationKey to SecretKey
   13 catch mongo exceptions for user creation, activation and update in case rollback needed
   12 add activation key logic with mongo
   11 validate user email duplication

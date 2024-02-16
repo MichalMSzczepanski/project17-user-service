@@ -2,7 +2,7 @@ package work.szczepanskimichal.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import work.szczepanskimichal.model.User;
-import work.szczepanskimichal.model.UserCreateDto;
+import work.szczepanskimichal.model.dto.UserCreateDto;
 import work.szczepanskimichal.enums.Type;
 
 public abstract class UserAssembler {

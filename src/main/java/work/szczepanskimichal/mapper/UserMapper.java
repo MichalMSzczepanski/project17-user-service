@@ -5,6 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import work.szczepanskimichal.model.*;
+import work.szczepanskimichal.model.dto.UserCreateDto;
+import work.szczepanskimichal.model.dto.UserDto;
+import work.szczepanskimichal.model.dto.UserUpdateDto;
 import work.szczepanskimichal.service.HashingService;
 
 @Mapper(componentModel = "spring")
@@ -19,8 +22,6 @@ public abstract class UserMapper {
     public abstract UserDto toUserDto(User user);
 
     public abstract UserUpdateDto toUserUpdateDto(User user);
-
-    public abstract User toEntity(UserUpdateDto userUpdateDto);
 
     @Named("hashPassword")
     public String hashPassword(String password) {

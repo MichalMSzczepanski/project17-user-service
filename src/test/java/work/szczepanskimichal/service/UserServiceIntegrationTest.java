@@ -8,11 +8,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import work.szczepanskimichal.enums.KeyType;
 import work.szczepanskimichal.model.User;
-import work.szczepanskimichal.model.UserUpdatePasswordDto;
+import work.szczepanskimichal.model.dto.UserUpdatePasswordDto;
 import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
-import work.szczepanskimichal.repository.ActivationKeyRepository;
+import work.szczepanskimichal.repository.SecretKeyRepository;
 import work.szczepanskimichal.repository.UserRepository;
 import work.szczepanskimichal.enums.Type;
 
@@ -32,7 +33,7 @@ class UserServiceIntegrationTest {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private ActivationKeyRepository activationKeyRepository;
+    private SecretKeyRepository secretKeyRepository;
     @Autowired
     private HashingService hashingService;
 
@@ -56,19 +57,18 @@ class UserServiceIntegrationTest {
         //given
         var userDto = UserAssembler.assembleRandomUserDto();
         var user = userService.createUser(userDto);
-        var activationKeyOptional = activationKeyRepository.getKeyByUserId(user.getId());
-        var activationKey = activationKeyOptional.get();
+        var secretKeyOptional = secretKeyRepository.getKeyByUserIdAndKeyType(user.getId(), KeyType.USER_CREATION);
+        var secretKey = secretKeyOptional.get();
 
         //when
-        var changedRows = userService.activateUser(user.getId(), activationKey.getKey());
+        userService.activateUser(user.getId(), secretKey.getKey());
 
         //then
-        assertTrue(changedRows > 0);
         var isActive = userRepository.findById(user.getId()).get().isActive();
         assertTrue(isActive);
         assertEquals(Type.USER, user.getType());
-        var activationKeyAfterActivation = activationKeyRepository.getKeyByUserId(user.getId());
-        assertTrue(activationKeyAfterActivation.isEmpty());
+        var secretKeyAftersecret = secretKeyRepository.getKeyByUserIdAndKeyType(user.getId(), KeyType.USER_CREATION);
+        assertTrue(secretKeyAftersecret.isEmpty());
     }
 
     @Test

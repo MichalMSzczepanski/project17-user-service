@@ -3,10 +3,10 @@ package work.szczepanskimichal.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import work.szczepanskimichal.model.UserCreateDto;
-import work.szczepanskimichal.model.UserDto;
-import work.szczepanskimichal.model.UserUpdateDto;
-import work.szczepanskimichal.model.UserUpdatePasswordDto;
+import work.szczepanskimichal.model.dto.UserCreateDto;
+import work.szczepanskimichal.model.dto.UserDto;
+import work.szczepanskimichal.model.dto.UserUpdateDto;
+import work.szczepanskimichal.model.dto.UserUpdatePasswordDto;
 import work.szczepanskimichal.service.UserService;
 
 import java.util.List;
@@ -35,14 +35,14 @@ public class InternalUserController {
     }
 
     @PatchMapping("/update/{userId}")
-    public UserDto update(@PathVariable UUID userId, @RequestBody UserUpdateDto userDto) {
-        return userService.updateUser(userId, userDto);
+    public UserDto update(@PathVariable UUID userId, @RequestBody UserUpdateDto dto) {
+        return userService.updateUser(userId, dto);
     }
 
     @PatchMapping("/update-password/{email}")
     public ResponseEntity<String> updatePassword(@PathVariable String email,
-                                                 @RequestBody UserUpdatePasswordDto userDto) {
-        userService.updatePassword(email, userDto);
+                                                 @RequestBody UserUpdatePasswordDto dto) {
+        userService.updatePassword(email, dto);
         return ResponseEntity.ok("Successfully updated password");
     }
 

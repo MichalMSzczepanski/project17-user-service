@@ -1,11 +1,11 @@
-package work.szczepanskimichal.model;
+package work.szczepanskimichal.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder(toBuilder = true)
 @Getter
-public class UserResetPasswordDto {
+public class UserResetPasswordDetailsDto {
 
     private String email;
     private String newPassword;
