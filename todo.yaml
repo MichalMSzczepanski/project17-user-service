@@ -1,12 +1,11 @@
 4 logic:
-  - /register
-  - /login
   - email after registration for confirmation
   - spring validation via spring-boot-starter-validation (tbc)
   - job for expired activation keys (24h from creation date)
 3 semantics:
+  - test secret key persistence of same userId and keyType
   - validate phone number via regex
-  - logic for verification that one secret key is assigned to user at one time
+  - logic for verification that one secret key is assigned to user at one time (?)
   - validation error handling in globalexceptionhandler
   - mock sending message via kafka to notification-service with email for verification
   - split InvalidActivationKeyException into not found with 404 and an actual error
