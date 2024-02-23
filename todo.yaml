@@ -1,8 +1,13 @@
+5 issues:
+  - build takes 40 seconds due to mongo and kafka embedding in tests
 4 logic:
+  - separate tests requiring mongo or kafka
   - email after registration for confirmation
   - spring validation via spring-boot-starter-validation (tbc)
   - job for expired activation keys (24h from creation date)
 3 semantics:
+  - test kafka producer
+  - add notification logic in todo spots
   - test secret key persistence of same userId and keyType
   - validate phone number via regex
   - logic for verification that one secret key is assigned to user at one time (?)

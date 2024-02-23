@@ -20,7 +20,7 @@ public class HashingService {
     public String hashPassword(String password) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(HASH_ALGORITHM);
-            byte[] salt = passwordHashingUtil.getSalt().getBytes();
+            byte[] salt = passwordHashingUtil.getHashingSalt().getBytes();
             messageDigest.update(salt);
             byte[] hashedPassword = messageDigest.digest(password.getBytes());
 

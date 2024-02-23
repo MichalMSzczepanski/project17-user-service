@@ -5,10 +5,10 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "validation")
+@ConfigurationProperties(prefix = "kafka.topic")
 @Component
 @Getter
 @Setter
-public class ValidationUtil {
-    private String emailRegex;
+public class KafkaUtil {
+    String notificationTopic;
 }

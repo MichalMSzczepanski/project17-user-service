@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import work.szczepanskimichal.enums.Type;
+import work.szczepanskimichal.enums.UserType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,7 +31,8 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    @Column(name = "user_type")
+    private UserType userType;
 
     private boolean active;
 

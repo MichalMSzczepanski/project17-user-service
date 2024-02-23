@@ -32,7 +32,7 @@ public class SecretKeyService {
                 .creationDate(LocalDateTime.now())
                 .build();
         var key = secretKeyRepository.save(newKey);
-        log.info("Successfully created secret key of type {} for user: {}", keyType, userId);
+        log.info("Successfully assigned secret key of type {} to user: {}", keyType, userId);
         return key;
     }
 

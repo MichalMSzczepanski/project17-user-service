@@ -21,8 +21,11 @@ spring:
       authentication-database: admin
 
 password:
-  hashing:
-    salt: "2b7e151628aed2a6abf7158809cf4f3c"
+  hashing-salt: "2b7e151628aed2a6abf7158809cf4f3c"
 
 validation:
-  emailRegex: "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
+  email-regex: "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
+
+kafka:
+  topic:
+    notification-topic: "NOTIFICATION_TOPIC"

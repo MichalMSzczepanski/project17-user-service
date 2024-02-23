@@ -2,7 +2,7 @@ package work.szczepanskimichal.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import work.szczepanskimichal.enums.Type;
+import work.szczepanskimichal.enums.UserType;
 
 import java.util.UUID;
 
@@ -14,7 +14,7 @@ public class UserCreateDto {
     private String email;
     private String password;
     private String passwordConfirmation;
-    private Type type;
+    private UserType userType;
     private boolean active;
     private String phoneNumber;
 

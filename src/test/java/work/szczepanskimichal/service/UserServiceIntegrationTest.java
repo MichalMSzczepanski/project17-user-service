@@ -1,29 +1,29 @@
 package work.szczepanskimichal.service;
 
 import de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import work.szczepanskimichal.enums.KeyType;
+import work.szczepanskimichal.enums.UserType;
 import work.szczepanskimichal.model.User;
 import work.szczepanskimichal.model.dto.UserUpdatePasswordDto;
 import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
 import work.szczepanskimichal.repository.SecretKeyRepository;
 import work.szczepanskimichal.repository.UserRepository;
-import work.szczepanskimichal.enums.Type;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Import(EmbeddedMongoAutoConfiguration.class)
+@EmbeddedKafka(partitions = 1, topics = {"NOTIFICATION_TOPIC"})
 class UserServiceIntegrationTest {
 
     @Autowired
@@ -49,7 +49,7 @@ class UserServiceIntegrationTest {
         var isActive = userRepository.findById(result.getId()).get().isActive();
         assertFalse(isActive);
         assertNotNull(result.getId());
-        assertEquals(Type.USER, result.getType());
+        assertEquals(UserType.USER, result.getUserType());
     }
 
     @Test
@@ -66,7 +66,7 @@ class UserServiceIntegrationTest {
         //then
         var isActive = userRepository.findById(user.getId()).get().isActive();
         assertTrue(isActive);
-        assertEquals(Type.USER, user.getType());
+        assertEquals(UserType.USER, user.getUserType());
         var secretKeyAftersecret = secretKeyRepository.getKeyByUserIdAndKeyType(user.getId(), KeyType.USER_CREATION);
         assertTrue(secretKeyAftersecret.isEmpty());
     }
@@ -105,7 +105,7 @@ class UserServiceIntegrationTest {
     void shouldThrowInvalidEmailException_onUserCreation() {
         //given
         var userDto = UserAssembler.assembleRandomUserDto();
-        var corruptedUserDto = userDto.toBuilder().email("not_an_email").build();
+        var corruptedUserDto = userDto.toBuilder().email("invalid&email.com").build();
 
         //when-then
         assertThrows(InvalidEmailException.class, () -> userService.createUser(corruptedUserDto));
@@ -114,7 +114,7 @@ class UserServiceIntegrationTest {
     @Test
     void shouldThrowIAdminProgrammaticCreationException_onUserCreation() {
         var userDto = UserAssembler.assembleRandomUserDto();
-        var corruptedUserDto = userDto.toBuilder().type(Type.ADMIN).build();
+        var corruptedUserDto = userDto.toBuilder().userType(UserType.ADMIN).build();
 
         //when-then
         assertThrows(AdminProgrammaticCreationException.class, () -> userService.createUser(corruptedUserDto));
@@ -155,7 +155,7 @@ class UserServiceIntegrationTest {
                 .email("test@example.com")
                 .password("password")
                 .phoneNumber(oldPhoneNumber)
-                .type(Type.USER)
+                .userType(UserType.USER)
                 .build();
         var persistedUser = userRepository.save(user);
 

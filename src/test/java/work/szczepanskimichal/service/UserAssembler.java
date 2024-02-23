@@ -1,9 +1,9 @@
 package work.szczepanskimichal.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import work.szczepanskimichal.enums.UserType;
 import work.szczepanskimichal.model.User;
 import work.szczepanskimichal.model.dto.UserCreateDto;
-import work.szczepanskimichal.enums.Type;
 
 public abstract class UserAssembler {
 
@@ -11,7 +11,7 @@ public abstract class UserAssembler {
         return User.builder()
                 .email(generateRandomEmail())
                 .password(generateRandomPassword())
-                .type(Type.USER)
+                .userType(UserType.USER)
                 .active(true)
                 .phoneNumber(generateRandomPhoneNumber())
                 .build();
@@ -24,7 +24,7 @@ public abstract class UserAssembler {
                 .password(password)
                 .passwordConfirmation(password)
                 .phoneNumber(generateRandomPhoneNumber())
-                .type(Type.USER)
+                .userType(UserType.USER)
                 .build();
     }
 

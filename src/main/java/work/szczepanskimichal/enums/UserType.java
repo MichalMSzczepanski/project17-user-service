@@ -1,6 +1,6 @@
 package work.szczepanskimichal.enums;
 
-public enum Type {
+public enum UserType {
     USER,
     ADMIN
 

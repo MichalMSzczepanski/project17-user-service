@@ -7,12 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import work.szczepanskimichal.enums.KeyType;
+import work.szczepanskimichal.enums.UserType;
 import work.szczepanskimichal.model.*;
 import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
 import work.szczepanskimichal.model.dto.*;
 import work.szczepanskimichal.repository.UserRepository;
-import work.szczepanskimichal.enums.Type;
 import work.szczepanskimichal.utils.ValidationUtil;
 
 import java.util.List;
@@ -27,6 +27,7 @@ public class UserService {
     private final LoginResponseService loginResponseService;
     private final SecretKeyService secretKeyService;
     private final HashingService hashingService;
+    private final NotificationService notificationService;
     private final UserRepository userRepository;
     private final ValidationUtil validationUtil;
     private final UserMapper userMapper;
@@ -44,6 +45,7 @@ public class UserService {
             var secretKey = secretKeyService.assignSecretKeyToUser(createdDto.getId(), KeyType.USER_CREATION).getKey();
             createdDto = createdDto.toBuilder().secretKey(secretKey).build();
             //todo email with secret key for user account activation
+            notificationService.sendActivationEmail(createdDto.getEmail(), createdDto.getId(), secretKey);
         } catch (MongoException e) {
             throw new SecretKeyException(e.getMessage());
         }
@@ -77,7 +79,7 @@ public class UserService {
 
     @Transactional
     public UserDto updateUser(UUID userId, UserUpdateDto dto) {
-        var dtoType = dto.getType();
+        var dtoType = dto.getUserType();
         validateType(dtoType);
         var dtoEmail = dto.getEmail();
         validateEmail(dtoEmail);
@@ -88,7 +90,7 @@ public class UserService {
         }
         user = user.toBuilder()
                 .email(dtoEmail)
-                .type(dtoType)
+                .userType(dtoType)
                 .phoneNumber(dto.getPhoneNumber())
                 .build();
         return userMapper.toUserDto(userRepository.save(user));
@@ -157,16 +159,16 @@ public class UserService {
     }
 
     private void validateUserFields(UserCreateDto dto) {
-        validateType(dto.getType());
+        validateType(dto.getUserType());
         validateEmail(dto.getEmail());
         validatePasswords(dto.getPassword(), dto.getPasswordConfirmation());
     }
 
-    private void validateType(Type type) {
-        if (type == null) {
+    private void validateType(UserType userType) {
+        if (userType == null) {
             throw new MissingFieldException("user type");
         }
-        if (type.equals(Type.ADMIN)) {
+        if (userType.equals(UserType.ADMIN)) {
             throw new AdminProgrammaticCreationException();
         }
     }
