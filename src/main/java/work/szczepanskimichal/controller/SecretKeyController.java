@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import work.szczepanskimichal.enums.KeyType;
-import work.szczepanskimichal.model.SecretKey;
+import work.szczepanskimichal.model.key.KeyType;
+import work.szczepanskimichal.model.key.SecretKey;
 import work.szczepanskimichal.service.SecretKeyService;
 
 import java.util.UUID;

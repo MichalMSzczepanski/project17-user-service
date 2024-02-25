@@ -1,4 +1,4 @@
-package work.szczepanskimichal.enums;
+package work.szczepanskimichal.model.user;
 
 public enum UserType {
     USER,

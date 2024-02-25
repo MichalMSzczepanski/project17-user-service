@@ -3,9 +3,9 @@ package work.szczepanskimichal.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import work.szczepanskimichal.enums.KeyType;
+import work.szczepanskimichal.model.key.KeyType;
 import work.szczepanskimichal.exception.SecretKeyNotAssignedException;
-import work.szczepanskimichal.model.SecretKey;
+import work.szczepanskimichal.model.key.SecretKey;
 import work.szczepanskimichal.exception.InvalidSecretKeyException;
 import work.szczepanskimichal.repository.SecretKeyRepository;
 

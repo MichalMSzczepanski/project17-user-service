@@ -1,18 +1,17 @@
 package work.szczepanskimichal.model.notification;
 
-import work.szczepanskimichal.enums.NotificationSubject;
-import work.szczepanskimichal.enums.NotificationType;
+import lombok.Builder;
+import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public interface Notification {
+@Builder
+@Getter
+public class Notification implements Serializable {
 
-    String getAddressee();
-
-    NotificationType getType();
-
-    NotificationSubject getSubject();
-
-    Map<String, String> getMessageParameters();
-
+    private String addressee;
+    private NotificationType type;
+    private NotificationSubject subject;
+    private Map<String, String> messageParameters;
 }

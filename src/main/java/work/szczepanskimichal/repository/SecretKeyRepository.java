@@ -1,8 +1,8 @@
 package work.szczepanskimichal.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import work.szczepanskimichal.enums.KeyType;
-import work.szczepanskimichal.model.SecretKey;
+import work.szczepanskimichal.model.key.KeyType;
+import work.szczepanskimichal.model.key.SecretKey;
 
 import java.util.Optional;
 import java.util.UUID;

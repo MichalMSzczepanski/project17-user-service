@@ -2,9 +2,9 @@ package work.szczepanskimichal.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import work.szczepanskimichal.enums.NotificationSubject;
-import work.szczepanskimichal.enums.NotificationType;
-import work.szczepanskimichal.model.notification.Email;
+import work.szczepanskimichal.model.notification.Notification;
+import work.szczepanskimichal.model.notification.NotificationSubject;
+import work.szczepanskimichal.model.notification.NotificationType;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -19,7 +19,7 @@ public class NotificationService {
         var parameters = new HashMap<String, String>();
         parameters.put("userId", userId.toString());
         parameters.put("secretKey", secretKey.toString());
-        var notification = Email.builder()
+        var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)
                 .subject(NotificationSubject.USER_ACTIVATION)
@@ -29,7 +29,7 @@ public class NotificationService {
     }
 
     public void sendActivationConfirmationMessage(String userEmail) {
-        var notification = Email.builder()
+        var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)
                 .subject(NotificationSubject.USER_ACTIVATION_CONFIRMATION)
@@ -38,7 +38,7 @@ public class NotificationService {
     }
 
     public void sendNewEmailConfiguredMessage(String userEmail) {
-        var notification = Email.builder()
+        var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)
                 .subject(NotificationSubject.USER_EMAIL_UPDATE)
@@ -50,7 +50,7 @@ public class NotificationService {
         var parameters = new HashMap<String, String>();
         parameters.put("userId", userId.toString());
         parameters.put("secretKey", secretKey.toString());
-        var notification = Email.builder()
+        var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)
                 .subject(NotificationSubject.USER_PASSWORD_UPDATE)

@@ -1,4 +1,4 @@
-package work.szczepanskimichal.model.dto;
+package work.szczepanskimichal.model.user.dto;
 
 import jakarta.validation.constraints.Email;
 import lombok.Builder;

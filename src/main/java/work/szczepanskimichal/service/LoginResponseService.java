@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import work.szczepanskimichal.model.LoginResponse;
-import work.szczepanskimichal.model.dto.UserLoginDto;
+import work.szczepanskimichal.model.user.dto.UserLoginDto;
 import work.szczepanskimichal.repository.LoginResponseRepository;
 
 import java.time.LocalDateTime;

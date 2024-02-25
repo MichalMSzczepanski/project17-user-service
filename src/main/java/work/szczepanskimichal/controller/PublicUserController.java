@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.model.*;
-import work.szczepanskimichal.model.dto.UserCreateDto;
-import work.szczepanskimichal.model.dto.UserDto;
-import work.szczepanskimichal.model.dto.UserLoginDto;
-import work.szczepanskimichal.model.dto.UserResetPasswordDetailsDto;
+import work.szczepanskimichal.model.user.dto.UserCreateDto;
+import work.szczepanskimichal.model.user.dto.UserDto;
+import work.szczepanskimichal.model.user.dto.UserLoginDto;
+import work.szczepanskimichal.model.user.dto.UserResetPasswordDetailsDto;
 import work.szczepanskimichal.service.UserService;
 
 import java.util.UUID;

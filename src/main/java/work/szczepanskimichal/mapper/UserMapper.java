@@ -4,10 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
-import work.szczepanskimichal.model.*;
-import work.szczepanskimichal.model.dto.UserCreateDto;
-import work.szczepanskimichal.model.dto.UserDto;
-import work.szczepanskimichal.model.dto.UserUpdateDto;
+import work.szczepanskimichal.model.user.dto.UserCreateDto;
+import work.szczepanskimichal.model.user.dto.UserDto;
+import work.szczepanskimichal.model.user.dto.UserUpdateDto;
+import work.szczepanskimichal.model.user.User;
 import work.szczepanskimichal.service.HashingService;
 
 @Mapper(componentModel = "spring")

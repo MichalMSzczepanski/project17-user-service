@@ -1,8 +1,8 @@
-package work.szczepanskimichal.model.dto;
+package work.szczepanskimichal.model.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import work.szczepanskimichal.enums.UserType;
+import work.szczepanskimichal.model.user.UserType;
 
 @Builder(toBuilder = true)
 @Getter

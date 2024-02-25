@@ -6,12 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import work.szczepanskimichal.enums.KeyType;
-import work.szczepanskimichal.enums.UserType;
+import work.szczepanskimichal.model.key.KeyType;
+import work.szczepanskimichal.model.user.UserType;
 import work.szczepanskimichal.model.*;
 import work.szczepanskimichal.exception.*;
 import work.szczepanskimichal.mapper.UserMapper;
-import work.szczepanskimichal.model.dto.*;
+import work.szczepanskimichal.model.user.User;
+import work.szczepanskimichal.model.user.dto.*;
 import work.szczepanskimichal.repository.UserRepository;
 import work.szczepanskimichal.utils.ValidationUtil;
 

@@ -3,10 +3,10 @@ package work.szczepanskimichal.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import work.szczepanskimichal.model.dto.UserCreateDto;
-import work.szczepanskimichal.model.dto.UserDto;
-import work.szczepanskimichal.model.dto.UserUpdateDto;
-import work.szczepanskimichal.model.dto.UserUpdatePasswordDto;
+import work.szczepanskimichal.model.user.dto.UserCreateDto;
+import work.szczepanskimichal.model.user.dto.UserDto;
+import work.szczepanskimichal.model.user.dto.UserUpdateDto;
+import work.szczepanskimichal.model.user.dto.UserUpdatePasswordDto;
 import work.szczepanskimichal.service.UserService;
 
 import java.util.List;

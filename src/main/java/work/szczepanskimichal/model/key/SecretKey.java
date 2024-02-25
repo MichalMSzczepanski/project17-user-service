@@ -1,11 +1,10 @@
-package work.szczepanskimichal.model;
+package work.szczepanskimichal.model.key;
 
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
-import work.szczepanskimichal.enums.KeyType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

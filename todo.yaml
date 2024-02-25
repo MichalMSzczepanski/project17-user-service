@@ -1,5 +1,5 @@
 5 issues:
-  - build takes 40 seconds due to mongo and kafka embedding in tests
+  - low test coverage
 4 logic:
   - spring validation via spring-boot-starter-validation (tbc)
   - job for expired activation keys (24h from creation date)

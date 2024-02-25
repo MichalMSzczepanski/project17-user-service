@@ -1,4 +1,4 @@
-package work.szczepanskimichal.enums;
+package work.szczepanskimichal.model.key;
 
 public enum KeyType {
     USER_CREATION,

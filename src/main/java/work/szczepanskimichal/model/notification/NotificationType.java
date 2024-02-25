@@ -1,4 +1,4 @@
-package work.szczepanskimichal.enums;
+package work.szczepanskimichal.model.notification;
 
 public enum NotificationType {
 
