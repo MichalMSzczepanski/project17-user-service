@@ -1,12 +1,12 @@
 package work.szczepanskimichal.service;
 
 import de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import work.szczepanskimichal.enums.KeyType;
 import work.szczepanskimichal.enums.UserType;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Transactional
 @Import(EmbeddedMongoAutoConfiguration.class)
 @EmbeddedKafka(partitions = 1, topics = {"NOTIFICATION_TOPIC"})
 class UserServiceIntegrationTest {
