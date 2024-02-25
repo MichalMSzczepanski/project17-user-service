@@ -32,6 +32,24 @@ public class UserService {
     private final ValidationUtil validationUtil;
     private final UserMapper userMapper;
 
+    public ResponseEntity<LoginResponse> login(UserLoginDto dto) {
+        var isUserActive =
+                userRepository.isUserActive(dto.getEmail()).orElseThrow(InvalidLoginAttemptException::new);
+        if (!isUserActive) {
+            throw new UserInactiveException(dto.getEmail());
+        }
+        var persistedPassword =
+                userRepository.findPasswordByEmail(dto.getEmail())
+                        .orElseThrow(() -> new UserNotFoundException(dto.getEmail()));
+        var passwordsCheckSuccessful =
+                persistedPassword.equals(hashingService.hashPassword(dto.getPassword()));
+        return loginResponseService.registerLogin(dto, passwordsCheckSuccessful);
+    }
+
+    public UserDto register(UserCreateDto userCreateDto) {
+        return createUser(userCreateDto);
+    }
+
     @Transactional
     public UserDto createUser(UserCreateDto dto) {
         log.info("Initiating user creation for email: {}", dto.getEmail());
@@ -44,8 +62,7 @@ public class UserService {
         try {
             var secretKey = secretKeyService.assignSecretKeyToUser(createdDto.getId(), KeyType.USER_CREATION).getKey();
             createdDto = createdDto.toBuilder().secretKey(secretKey).build();
-            //todo email with secret key for user account activation
-            notificationService.sendActivationEmail(createdDto.getEmail(), createdDto.getId(), secretKey);
+            notificationService.sendActivationMessage(createdDto.getEmail(), createdDto.getId(), secretKey);
         } catch (MongoException e) {
             throw new SecretKeyException(e.getMessage());
         }
@@ -55,14 +72,18 @@ public class UserService {
 
     @Transactional
     public void activateUser(UUID userId, UUID secretKey) {
-        userRepository.activateUser(userId);
+        var userEmail = userRepository.findEmailById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        var updatedRecords = userRepository.activateUser(userId);
+        if (updatedRecords < 1) {
+            throw new UserInactiveException(userEmail);
+        }
         try {
             secretKeyService.deleteByUserIdAndKey(secretKey, userId, KeyType.USER_CREATION);
         } catch (MongoException e) {
             log.error("Failed to manage user secret key.", userId);
             throw new SecretKeyException(e.getMessage());
         }
-        //todo send email confirming user activation
+        notificationService.sendActivationConfirmationMessage(userEmail);
     }
 
     public UserDto getUser(UUID userId) {
@@ -84,37 +105,22 @@ public class UserService {
         var dtoEmail = dto.getEmail();
         validateEmail(dtoEmail);
         var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        if (emailUpdated(dtoEmail, user.getEmail())) {
-            isEmailAvailable(dtoEmail);
-            //todo send email to new email with information
+        if (emailUpdateRequested(dtoEmail, user.getEmail())) {
+            validateEmailAvailability(dtoEmail);
         }
         user = user.toBuilder()
                 .email(dtoEmail)
                 .userType(dtoType)
                 .phoneNumber(dto.getPhoneNumber())
                 .build();
-        return userMapper.toUserDto(userRepository.save(user));
+        var userUpdated = userMapper.toUserDto(userRepository.save(user));
+        notificationService.sendNewEmailConfiguredMessage(userUpdated.getEmail());
+        return userUpdated;
     }
 
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
         log.info("Successfully deleted user with id: {}", userId);
-    }
-
-    public ResponseEntity<LoginResponse> login(UserLoginDto dto) {
-        if (!userRepository.isUserActive(dto.getEmail())) {
-            throw new UserInactiveException(dto.getEmail());
-        }
-        var persistedPassword =
-                userRepository.findPasswordByEmail(dto.getEmail())
-                        .orElseThrow(() -> new UserNotFoundException(dto.getEmail()));
-        var passwordsCheckSuccessful =
-                persistedPassword.equals(hashingService.hashPassword(dto.getPassword()));
-        return loginResponseService.registerLogin(dto, passwordsCheckSuccessful);
-    }
-
-    public UserDto register(UserCreateDto userCreateDto) {
-        return createUser(userCreateDto);
     }
 
     @Transactional
@@ -132,10 +138,10 @@ public class UserService {
                 hashingService.hashPassword(dto.getNewPassword()));
     }
 
-    public void resetPassword(String email) {
-        var userId = userRepository.findIdByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-        secretKeyService.assignSecretKeyToUser(userId, KeyType.PASSWORD_RESET);
-        //todo email user with secret key for password reset link
+    public void resetPassword(String userEmail) {
+        var userId = userRepository.findIdByEmail(userEmail).orElseThrow(() -> new UserNotFoundException(userEmail));
+        var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.PASSWORD_RESET);
+        notificationService.sendResetPasswordConfirmationMessage(userEmail, userId, secretKey.getKey());
     }
 
     @Transactional
@@ -192,7 +198,7 @@ public class UserService {
         }
     }
 
-    private boolean isEmailAvailable(String email) {
+    private boolean validateEmailAvailability(String email) {
         if (userRepository.userWithEmailExists(email) > 0) {
             throw new EmailDuplicationException(email);
         }
@@ -205,7 +211,7 @@ public class UserService {
         return matcher.matches();
     }
 
-    private boolean emailUpdated(String newEmail, String oldEmail) {
+    private boolean emailUpdateRequested(String newEmail, String oldEmail) {
         return !oldEmail.equals(newEmail);
     }
 }

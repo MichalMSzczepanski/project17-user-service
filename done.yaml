@@ -9,6 +9,7 @@
   2 global exception handler
   1 basic crud for users
 3 semantics:
+  16 notifications for activation, password and email update
   15 introduce kafka producer for notification handling
   14 refactor ActivationKey to SecretKey
   13 catch mongo exceptions for user creation, activation and update in case rollback needed

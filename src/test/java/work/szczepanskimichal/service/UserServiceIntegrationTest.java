@@ -67,8 +67,9 @@ class UserServiceIntegrationTest {
         var isActive = userRepository.findById(user.getId()).get().isActive();
         assertTrue(isActive);
         assertEquals(UserType.USER, user.getUserType());
-        var secretKeyAftersecret = secretKeyRepository.getKeyByUserIdAndKeyType(user.getId(), KeyType.USER_CREATION);
-        assertTrue(secretKeyAftersecret.isEmpty());
+        var secretKeyAfterActivation = secretKeyRepository.getKeyByUserIdAndKeyType(user.getId(),
+                KeyType.USER_CREATION);
+        assertTrue(secretKeyAfterActivation.isEmpty());
     }
 
     @Test

@@ -1,15 +1,18 @@
 package work.szczepanskimichal.model.notification;
 
+import work.szczepanskimichal.enums.NotificationSubject;
 import work.szczepanskimichal.enums.NotificationType;
+
+import java.util.Map;
 
 public interface Notification {
 
-    NotificationType getType();
-
     String getAddressee();
 
-    String getSubject();
+    NotificationType getType();
 
-    String getMessage();
+    NotificationSubject getSubject();
+
+    Map<String, String> getMessageParameters();
 
 }

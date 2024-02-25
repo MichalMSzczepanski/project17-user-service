@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     int activateUser(@Param("id") UUID id);
 
     @Query("SELECT u.active FROM User u WHERE u.email = :email")
-    boolean isUserActive(@Param("email") String email);
+    Optional<Boolean> isUserActive(@Param("email") String email);
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE User u SET u.password = :password WHERE u.email  = :email")
@@ -32,5 +32,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT u.id FROM User u WHERE u.email = :email")
     Optional<UUID> findIdByEmail(@Param("email") String email);
+
+    @Query("SELECT u.email FROM User u WHERE u.id = :id")
+    Optional<String> findEmailById(@Param("id") UUID id);
 
 }
