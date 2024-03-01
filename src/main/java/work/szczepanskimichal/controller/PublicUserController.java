@@ -44,7 +44,7 @@ public class PublicUserController {
         return ResponseEntity.ok().body("Successfully updated password");
     }
 
-    @PatchMapping("/activate/{userId}/{secretKey}")
+    @GetMapping("/activate/{userId}/{secretKey}")
     public ResponseEntity<String> activateUser(@PathVariable("userId") UUID userId,
                                                @PathVariable("secretKey") UUID secretKey) {
         userService.activateUser(userId, secretKey);

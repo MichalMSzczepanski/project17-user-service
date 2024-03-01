@@ -115,12 +115,13 @@ public class UserService {
                 .phoneNumber(dto.getPhoneNumber())
                 .build();
         var userUpdated = userMapper.toUserDto(userRepository.save(user));
-        notificationService.sendNewEmailConfiguredMessage(userUpdated.getEmail());
+        notificationService.sendNewEmailUpdateMessage(userUpdated.getEmail());
         return userUpdated;
     }
 
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
+        //todo delete all secret keys
         log.info("Successfully deleted user with id: {}", userId);
     }
 
@@ -142,7 +143,7 @@ public class UserService {
     public void resetPassword(String userEmail) {
         var userId = userRepository.findIdByEmail(userEmail).orElseThrow(() -> new UserNotFoundException(userEmail));
         var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.PASSWORD_RESET);
-        notificationService.sendResetPasswordConfirmationMessage(userEmail, userId, secretKey.getKey());
+        notificationService.sendResetPasswordConfirmationMessage(userEmail, secretKey.getKey());
     }
 
     @Transactional

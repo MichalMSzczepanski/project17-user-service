@@ -37,7 +37,7 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
-    public void sendNewEmailConfiguredMessage(String userEmail) {
+    public void sendNewEmailUpdateMessage(String userEmail) {
         var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)
@@ -46,9 +46,8 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
-    public void sendResetPasswordConfirmationMessage(String userEmail, UUID userId, UUID secretKey) {
+    public void sendResetPasswordConfirmationMessage(String userEmail, UUID secretKey) {
         var parameters = new HashMap<String, String>();
-        parameters.put("userId", userId.toString());
         parameters.put("secretKey", secretKey.toString());
         var notification = Notification.builder()
                 .addressee(userEmail)
