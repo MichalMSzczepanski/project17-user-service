@@ -26,6 +26,7 @@
   2 create user roles
   1 create user entity
 2 config:
+  19 configure kafka for prod
   18 update user entity flyway script for less non-nulls
   17 working prod/ local for mongo/ postgres
   16 add mongo db for prod, local and embedded test

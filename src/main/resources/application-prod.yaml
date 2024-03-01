@@ -6,3 +6,5 @@ spring:
   data:
     mongodb:
       host: mongo
+  kafka:
+    bootstrap-servers: kafka:9092
