@@ -160,6 +160,7 @@ public class UserService {
             log.error("Failed to manage user secret key.", userId);
             throw new SecretKeyException(e.getMessage());
         }
+        //todo send notification that password has been updated
     }
 
     private User findUserById(UUID userId) {

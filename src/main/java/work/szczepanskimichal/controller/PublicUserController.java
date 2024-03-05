@@ -13,18 +13,16 @@ import work.szczepanskimichal.service.UserService;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/public/user")
 @RequiredArgsConstructor
 public class PublicUserController {
 
     private final UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping("/authenticate-credentials")
     public ResponseEntity<LoginResponse> login(@RequestBody UserLoginDto dto) {
         return userService.login(dto);
     }
-
-    //logout
-    //invalidate jwt
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody UserCreateDto dto) {

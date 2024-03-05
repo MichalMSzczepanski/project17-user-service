@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("kafka.topic")
+@ConfigurationProperties("spring.mail")
 @Getter
 @Setter
-public class KafkaUtil {
-    private String notificationTopic;
+public class CredentialsUtil {
+    String password;
 }

@@ -112,6 +112,12 @@
             <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
         </dependency>
+<!--        custom properties source-->
+        <dependency>
+            <groupId>work.szczepanskimichal</groupId>
+            <artifactId>property-library</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
