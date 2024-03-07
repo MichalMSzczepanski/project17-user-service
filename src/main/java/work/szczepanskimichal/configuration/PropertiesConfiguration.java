@@ -4,8 +4,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
-import work.szczepanskimichal.utils.CredentialsUtil;
-import work.szczepanskimichal.utils.KafkaUtil;
+import work.szczepanskimichal.util.CredentialsUtil;
+import work.szczepanskimichal.util.KafkaUtil;
 
 @Configuration
 @EnableConfigurationProperties({KafkaUtil.class, CredentialsUtil.class})
@@ -34,7 +34,7 @@ public class PropertiesConfiguration {
     @Profile("prod")
     @PropertySource(name = "kafkaProdTopics", value = "classpath:/prod/topics.yaml", factory =
             YamlPropertyFactorySource.class)
-    @PropertySource(name = "kafkaProdTopics", value = "classpath:/prod/credentials.yaml", factory =
+    @PropertySource(name = "kafkaProdCredentials", value = "classpath:/prod/credentials.yaml", factory =
             YamlPropertyFactorySource.class)
     public static class ProdPropertiesConfiguration {
 

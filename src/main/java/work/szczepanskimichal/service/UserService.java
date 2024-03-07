@@ -14,7 +14,7 @@ import work.szczepanskimichal.mapper.UserMapper;
 import work.szczepanskimichal.model.user.User;
 import work.szczepanskimichal.model.user.dto.*;
 import work.szczepanskimichal.repository.UserRepository;
-import work.szczepanskimichal.utils.ValidationUtil;
+import work.szczepanskimichal.util.ValidationUtil;
 
 import java.util.List;
 import java.util.UUID;

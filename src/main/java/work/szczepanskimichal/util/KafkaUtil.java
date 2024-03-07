@@ -1,12 +1,12 @@
-package work.szczepanskimichal.utils;
+package work.szczepanskimichal.util;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("spring.mail")
+@ConfigurationProperties("kafka.topic")
 @Getter
 @Setter
-public class CredentialsUtil {
-    String password;
+public class KafkaUtil {
+    private String notificationTopic;
 }

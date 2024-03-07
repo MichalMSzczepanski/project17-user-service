@@ -8,3 +8,4 @@ spring:
       host: mongo
   kafka:
     bootstrap-servers: kafka:9092
+

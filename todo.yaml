@@ -17,6 +17,7 @@
   - externalize and encapsulate credentials/ hashing salt
   - controller tests
 2 config:
+  - move password hashing salt and validation regex to property-library and bean
   - db:
       - application variables for db connection (?)
 1 git:

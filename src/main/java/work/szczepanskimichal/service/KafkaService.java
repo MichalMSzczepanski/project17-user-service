@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import work.szczepanskimichal.model.notification.Notification;
-import work.szczepanskimichal.utils.KafkaUtil;
+import work.szczepanskimichal.util.KafkaUtil;
 
 @Service
 @RequiredArgsConstructor

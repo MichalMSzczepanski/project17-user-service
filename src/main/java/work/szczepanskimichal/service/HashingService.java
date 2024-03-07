@@ -2,7 +2,7 @@ package work.szczepanskimichal.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import work.szczepanskimichal.utils.PasswordHashingUtil;
+import work.szczepanskimichal.util.PasswordHashingUtil;
 import work.szczepanskimichal.exception.PasswordHashingException;
 
 import java.security.MessageDigest;
