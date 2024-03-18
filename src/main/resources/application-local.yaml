@@ -1,3 +1,8 @@
+server:
+  port: 8081
+#  for local api gateway debugging:
+  address: 127.0.0.1
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/users

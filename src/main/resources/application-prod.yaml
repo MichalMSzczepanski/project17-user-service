@@ -1,3 +1,6 @@
+server:
+  address: 127.0.0.1
+
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/users
