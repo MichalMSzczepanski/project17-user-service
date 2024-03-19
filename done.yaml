@@ -26,6 +26,7 @@
   2 create user roles
   1 create user entity
 2 config:
+  21 update local and prod config for port exposure in docker-compose
   20 introduce custom library for externalized properties
   19 configure kafka for prod
   18 update user entity flyway script for less non-nulls
