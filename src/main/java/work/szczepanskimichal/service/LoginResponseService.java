@@ -18,7 +18,7 @@ public class LoginResponseService {
 
     private final LoginResponseRepository loginResponseRepository;
 
-    public ResponseEntity<LoginResponse> registerLogin(UserLoginDto userLoginDto, boolean successfulLogin) {
+    public ResponseEntity<LoginResponse> registerAuthentication(UserLoginDto userLoginDto, boolean successfulLogin) {
         String message;
         HttpStatus status;
         if (successfulLogin) {

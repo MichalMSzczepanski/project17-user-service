@@ -12,7 +12,7 @@ import work.szczepanskimichal.service.UserService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/v1/user")
 @RequiredArgsConstructor
 public class AuthenticatedUserController {
 

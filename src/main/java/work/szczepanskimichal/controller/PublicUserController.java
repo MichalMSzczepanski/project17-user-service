@@ -13,15 +13,15 @@ import work.szczepanskimichal.service.UserService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/public/user")
+@RequestMapping("/v1/public/user")
 @RequiredArgsConstructor
 public class PublicUserController {
 
     private final UserService userService;
 
     @PostMapping("/authenticate-credentials")
-    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginDto dto) {
-        return userService.login(dto);
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody UserLoginDto dto) {
+        return userService.authenticate(dto);
     }
 
     @PostMapping("/register")

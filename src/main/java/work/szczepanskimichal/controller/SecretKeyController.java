@@ -13,7 +13,7 @@ import work.szczepanskimichal.service.SecretKeyService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/secret-key")
+@RequestMapping("/v1/secret-key")
 @RequiredArgsConstructor
 public class SecretKeyController {
 

@@ -1,8 +1,10 @@
 package work.szczepanskimichal.service;
 
+import com.mongodb.MongoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import work.szczepanskimichal.exception.SecretKeyException;
 import work.szczepanskimichal.model.key.KeyType;
 import work.szczepanskimichal.exception.SecretKeyNotAssignedException;
 import work.szczepanskimichal.model.key.SecretKey;
@@ -47,5 +49,9 @@ public class SecretKeyService {
         } else {
             throw new InvalidSecretKeyException();
         }
+    }
+
+    public void deleteByUserId(UUID userId) {
+        secretKeyRepository.deleteAllByUserId(userId);
     }
 }

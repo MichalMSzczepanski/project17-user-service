@@ -57,4 +57,13 @@ public class NotificationService {
                 .build();
         kafkaService.sendMessage(notification);
     }
+
+    public void sendPasswordUpdatedMessage(String userEmail) {
+        var notification = Notification.builder()
+                .addressee(userEmail)
+                .type(NotificationType.EMAIL)
+                .subject(NotificationSubject.USER_PASSWORD_UPDATED)
+                .build();
+        kafkaService.sendMessage(notification);
+    }
 }

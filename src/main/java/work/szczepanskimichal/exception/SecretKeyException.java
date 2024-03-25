@@ -1,8 +1,10 @@
 package work.szczepanskimichal.exception;
 
+import java.util.UUID;
+
 public class SecretKeyException extends RuntimeException {
 
-    public SecretKeyException(String errorMessage) {
-        super(String.format("Encountered issue on secret key persistence. Error: %s", errorMessage));
+    public SecretKeyException( UUID userId, String errorMessage) {
+        super(String.format("Encountered issue when managing secret key for user: %s. Error: %s", userId, errorMessage));
     }
 }

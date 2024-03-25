@@ -33,8 +33,8 @@ public class UserService {
     private final ValidationUtil validationUtil;
     private final UserMapper userMapper;
 
-    public ResponseEntity<LoginResponse> login(UserLoginDto dto) {
-        var isUserActive =
+    public ResponseEntity<LoginResponse> authenticate(UserLoginDto dto) {
+        boolean isUserActive =
                 userRepository.isUserActive(dto.getEmail()).orElseThrow(InvalidLoginAttemptException::new);
         if (!isUserActive) {
             throw new UserInactiveException(dto.getEmail());
@@ -44,7 +44,7 @@ public class UserService {
                         .orElseThrow(() -> new UserNotFoundException(dto.getEmail()));
         var passwordsCheckSuccessful =
                 persistedPassword.equals(hashingService.hashPassword(dto.getPassword()));
-        return loginResponseService.registerLogin(dto, passwordsCheckSuccessful);
+        return loginResponseService.registerAuthentication(dto, passwordsCheckSuccessful);
     }
 
     public UserDto register(UserCreateDto userCreateDto) {
@@ -65,7 +65,8 @@ public class UserService {
             createdDto = createdDto.toBuilder().secretKey(secretKey).build();
             notificationService.sendActivationMessage(createdDto.getEmail(), createdDto.getId(), secretKey);
         } catch (MongoException e) {
-            throw new SecretKeyException(e.getMessage());
+            log.error("User creation rolled back due to failure to manage secret key for user: {}", createdDto.getId());
+            throw new SecretKeyException(createdDto.getId(), e.getMessage());
         }
         log.info("Successfully created user. user id: {}", createdDto.getId());
         return createdDto;
@@ -81,8 +82,8 @@ public class UserService {
         try {
             secretKeyService.deleteByUserIdAndKey(secretKey, userId, KeyType.USER_CREATION);
         } catch (MongoException e) {
-            log.error("Failed to manage user secret key.", userId);
-            throw new SecretKeyException(e.getMessage());
+            log.error("Activation rolled back due to failure to manage secret key for user: {}", userId);
+            throw new SecretKeyException(userId, e.getMessage());
         }
         notificationService.sendActivationConfirmationMessage(userEmail);
     }
@@ -121,7 +122,12 @@ public class UserService {
 
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
-        //todo delete all secret keys
+        try {
+            secretKeyService.deleteByUserId(userId);
+        } catch (MongoException e) {
+            log.error("User deletion rolled back due to failure to manage secret key for user: {}", userId);
+            throw new SecretKeyException(userId, e.getMessage());
+        }
         log.info("Successfully deleted user with id: {}", userId);
     }
 
@@ -140,10 +146,10 @@ public class UserService {
                 hashingService.hashPassword(dto.getNewPassword()));
     }
 
-    public void resetPassword(String userEmail) {
-        var userId = userRepository.findIdByEmail(userEmail).orElseThrow(() -> new UserNotFoundException(userEmail));
+    public void resetPassword(String email) {
+        var userId = userRepository.findIdByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.PASSWORD_RESET);
-        notificationService.sendResetPasswordConfirmationMessage(userEmail, secretKey.getKey());
+        notificationService.sendResetPasswordConfirmationMessage(email, secretKey.getKey());
     }
 
     @Transactional
@@ -157,10 +163,10 @@ public class UserService {
         try {
             secretKeyService.deleteByUserIdAndKey(secretKey, userId, KeyType.PASSWORD_RESET);
         } catch (MongoException e) {
-            log.error("Failed to manage user secret key.", userId);
-            throw new SecretKeyException(e.getMessage());
+            log.error("Password update rolled back due to failure to manage secret key for user: {}", userId);
+            throw new SecretKeyException(userId, e.getMessage());
         }
-        //todo send notification that password has been updated
+        notificationService.sendPasswordUpdatedMessage(email);
     }
 
     private User findUserById(UUID userId) {

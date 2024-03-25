@@ -15,5 +15,6 @@ public interface SecretKeyRepository extends MongoRepository<SecretKey, String> 
 
     Optional<SecretKey> getSecretKeyByKeyAndUserId(UUID key, UUID userId);
 
+    void deleteAllByUserId(UUID userID);
 }
 

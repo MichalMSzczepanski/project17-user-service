@@ -8,7 +8,7 @@ import work.szczepanskimichal.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/internal/user")
+@RequestMapping("/v1/internal/user")
 @RequiredArgsConstructor
 public class InternalUserController {
 
