@@ -3,10 +3,8 @@ package work.szczepanskimichal.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import work.szczepanskimichal.model.*;
 import work.szczepanskimichal.model.user.dto.UserCreateDto;
 import work.szczepanskimichal.model.user.dto.UserDto;
-import work.szczepanskimichal.model.user.dto.UserLoginDto;
 import work.szczepanskimichal.model.user.dto.UserResetPasswordDetailsDto;
 import work.szczepanskimichal.service.UserService;
 
@@ -18,11 +16,6 @@ import java.util.UUID;
 public class PublicUserController {
 
     private final UserService userService;
-
-    @PostMapping("/authenticate-credentials")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody UserLoginDto dto) {
-        return userService.authenticate(dto);
-    }
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody UserCreateDto dto) {
