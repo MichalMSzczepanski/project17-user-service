@@ -3,6 +3,7 @@ package work.szczepanskimichal.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.model.LoginResponse;
+import work.szczepanskimichal.model.user.dto.UserCreateDto;
 import work.szczepanskimichal.model.user.dto.UserDto;
 import work.szczepanskimichal.model.user.dto.UserLoginDto;
 import work.szczepanskimichal.service.UserService;
@@ -25,6 +26,11 @@ public class InternalUserController {
     @GetMapping("/all-users")
     public List<UserDto> getAll() {
         return userService.getAllUsers();
+    }
+
+    @PostMapping("")
+    public UserDto create(@RequestBody UserCreateDto userDto) {
+        return userService.createUser(userDto);
     }
 
 }

@@ -18,11 +18,6 @@ public class AuthenticatedUserController {
 
     private final UserService userService;
 
-    @PostMapping("")
-    public UserDto create(@RequestBody UserCreateDto userDto) {
-        return userService.createUser(userDto);
-    }
-
     @GetMapping("/{userId}")
     public UserDto get(@PathVariable UUID userId) {
         return userService.getUser(userId);

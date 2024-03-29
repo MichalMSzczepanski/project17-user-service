@@ -1,6 +1,7 @@
 5 fixes:
   <not tracked>
 4 logic:
+  8 login integration with gateway
   7 login, register, password reset and password set refactor
   6 login, register, password reset and password set
   5 encapsulate password update logic
