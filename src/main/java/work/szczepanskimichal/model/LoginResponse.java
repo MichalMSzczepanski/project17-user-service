@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class LoginResponse {
     @Id
     private String id;
+    private UUID userId;
     private String email;
     private HttpStatus responseStatus;
     private String message;

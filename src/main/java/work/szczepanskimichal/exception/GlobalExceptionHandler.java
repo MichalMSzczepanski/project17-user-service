@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidLoginAttemptException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleInvalidEmailException(InvalidLoginAttemptException e) {
+    public ResponseEntity<String> handleInvalidLoginAttempt(InvalidLoginAttemptException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
