@@ -4,7 +4,7 @@ import com.mongodb.MongoException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import work.szczepanskimichal.model.key.KeyType;
 import work.szczepanskimichal.model.user.UserType;
@@ -16,7 +16,9 @@ import work.szczepanskimichal.model.user.dto.*;
 import work.szczepanskimichal.repository.UserRepository;
 import work.szczepanskimichal.util.ValidationUtil;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -33,20 +35,37 @@ public class UserService {
     private final ValidationUtil validationUtil;
     private final UserMapper userMapper;
 
-    public ResponseEntity<LoginResponse> authenticate(UserLoginDto dto) {
-        boolean isUserActive =
-                userRepository.isUserActive(dto.getEmail()).orElseThrow(InvalidLoginAttemptException::new);
-        if (!isUserActive) {
-            throw new UserInactiveException(dto.getEmail());
+    public Optional<LoginResponse> authenticate(UserLoginDto dto) {
+        var isUserActiveOptional =
+                userRepository.isUserActive(dto.getEmail());
+        if (isUserActiveOptional.isEmpty()) {
+            return Optional.ofNullable(loginResponseService.buildLoginResponse(
+                    null,
+                    dto.getEmail(),
+                    "user not found",
+                    HttpStatus.NOT_FOUND));
         }
-        var persistedPassword =
-                userRepository.findPasswordByEmail(dto.getEmail())
-                        .orElseThrow(() -> new UserNotFoundException(dto.getEmail()));
+        if (Boolean.FALSE.equals(isUserActiveOptional.get())) {
+            return Optional.ofNullable(loginResponseService.buildLoginResponse(
+                    null,
+                    dto.getEmail(),
+                    "user inactive",
+                    HttpStatus.BAD_REQUEST));
+        }
+        var persistedPasswordOptional = userRepository.findPasswordByEmail(dto.getEmail());
+        if (persistedPasswordOptional.isEmpty()) {
+            return Optional.ofNullable(loginResponseService.buildLoginResponse(
+                    null,
+                    dto.getEmail(),
+                    "user not found",
+                    HttpStatus.NOT_FOUND));
+        }
         var passwordsCheckSuccessful =
-                persistedPassword.equals(hashingService.hashPassword(dto.getPassword()));
+                persistedPasswordOptional.get().equals(hashingService.hashPassword(dto.getPassword()));
         return loginResponseService.registerAuthentication(dto, passwordsCheckSuccessful);
     }
 
+    @Transactional
     public UserDto register(UserCreateDto userCreateDto) {
         return createUser(userCreateDto);
     }
