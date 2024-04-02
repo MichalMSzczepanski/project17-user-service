@@ -13,8 +13,3 @@ logging:
   level:
     org.flywaydb: TRACE
     org.hibernate.SQL: TRACE
-de:
-  flapdoodle:
-    mongodb:
-      embedded:
-        version: 6.0.5
