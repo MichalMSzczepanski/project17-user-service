@@ -4,6 +4,7 @@
   - spring validation via spring-boot-starter-validation (tbc)
   - job for expired activation keys (24h from creation date)
 3 semantics:
+  - v1/user/update/userId > exception if userType is lowercase - catch
   - secret keys should have a lifetime span of 24h
   - activation email is not triggered succesfully
   - test kafka producer
