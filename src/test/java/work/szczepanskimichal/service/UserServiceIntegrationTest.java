@@ -1,13 +1,16 @@
 package work.szczepanskimichal.service;
 
-import de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import work.szczepanskimichal.model.key.KeyType;
 import work.szczepanskimichal.model.user.UserType;
 import work.szczepanskimichal.model.user.User;
@@ -22,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@Import(EmbeddedMongoAutoConfiguration.class)
+@Testcontainers
 @EmbeddedKafka(partitions = 1, topics = {"NOTIFICATION_TOPIC"})
 class UserServiceIntegrationTest {
 
@@ -36,6 +39,19 @@ class UserServiceIntegrationTest {
     private SecretKeyRepository secretKeyRepository;
     @Autowired
     private HashingService hashingService;
+
+    @Container
+    private static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
+
+    @BeforeAll
+    public static void setUp() {
+        mongoDBContainer.start();
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        mongoDBContainer.stop();
+    }
 
     @Test
     void shouldCreateUser() {
