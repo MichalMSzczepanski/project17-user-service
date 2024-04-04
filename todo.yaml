@@ -24,7 +24,6 @@
 1 git:
 
 wishlist:
-  - aspects for checking authorization in headers
   - kafka queue to notification-service with creation/update/deletion
   - kafka queue to present-service to manage presents
   - aspects:

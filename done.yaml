@@ -1,6 +1,7 @@
 5 fixes:
   <not tracked>
 4 logic:
+  9 in AuthenticatedUserController check via aspects each request for X-User-Id header
   8 login integration with gateway
   7 login, register, password reset and password set refactor
   6 login, register, password reset and password set
