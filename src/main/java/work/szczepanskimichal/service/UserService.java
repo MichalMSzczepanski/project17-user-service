@@ -122,13 +122,15 @@ public class UserService {
     @Transactional
     public UserDto updateUser(UUID userId, UserUpdateDto dto) {
         var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        final var entityEmail = user.getEmail();
         var dtoType = dto.getUserType();
         validateType(dtoType);
         var dtoEmail = dto.getEmail();
         validateEmail(dtoEmail);
         var dtoPhoneNumber = dto.getPhoneNumber();
         validatePhoneNumber(dtoPhoneNumber);
-        var userActive = true;
+        boolean userActive =
+                userRepository.isUserActive(user.getEmail()).orElseThrow(() -> new UserNotFoundException(entityEmail));
         if (emailUpdateRequested(dtoEmail, user.getEmail()) && validateEmailAvailability(dtoEmail)) {
             setUserActiveStatus(userId, false);
             var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.USER_EMAIL_UPDATE).getKey();
