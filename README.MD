@@ -15,3 +15,7 @@ This is a Spring Boot project for managing user data
 2. run the app with maven wrapper
 - ./mvnw spring-boot:run
 
+## Swagger
+
+When deployed locally swagger is available at: `http://localhost:8081/swagger-ui/index.html`
+
