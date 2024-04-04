@@ -10,6 +10,8 @@
   2 global exception handler
   1 basic crud for users
 3 semantics:
+  18 secret key types update - USER_PASSWORD_RESET, USER_EMAIL_UPDATE
+  17 user data update logic update
   16 notifications for activation, password and email update
   15 introduce kafka producer for notification handling
   14 refactor ActivationKey to SecretKey

@@ -99,7 +99,10 @@ class UserServiceIntegrationTest {
     void shouldThrowPasswordMismatchException_onUserCreation() {
         //given
         var userDto = UserAssembler.assembleRandomUserDto();
-        var corruptedUserDto = userDto.toBuilder().password("wrong_password").build();
+        var corruptedUserDto = userDto.toBuilder()
+                .email("email@email.com")
+                .password("wrong_password")
+                .build();
 
         //when-then
         assertThrows(PasswordMismatchException.class, () -> userService.createUser(corruptedUserDto));

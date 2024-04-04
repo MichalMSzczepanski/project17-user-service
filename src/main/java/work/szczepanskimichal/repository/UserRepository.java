@@ -36,4 +36,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT u.email FROM User u WHERE u.id = :id")
     Optional<String> findEmailById(@Param("id") UUID id);
 
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE User u SET u.active = :active WHERE u.id  = :userId")
+    int setUserActiveStatus(@Param("userId") UUID userId, @Param("active") boolean active);
+
 }

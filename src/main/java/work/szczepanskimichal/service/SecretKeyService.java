@@ -51,6 +51,15 @@ public class SecretKeyService {
         }
     }
 
+    public void deleteByUserIdAndKey(UUID secretKey, UUID userId) {
+        var updatedRecords = secretKeyRepository.deleteByKeyAndUserId(secretKey, userId);
+        if (updatedRecords > 0) {
+            log.info("Successfully deleted secret key for user: {}", userId);
+        } else {
+            throw new InvalidSecretKeyException();
+        }
+    }
+
     public void deleteByUserId(UUID userId) {
         secretKeyRepository.deleteAllByUserId(userId);
     }

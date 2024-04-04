@@ -2,5 +2,6 @@ package work.szczepanskimichal.model.key;
 
 public enum KeyType {
     USER_CREATION,
-    PASSWORD_RESET
+    USER_PASSWORD_RESET,
+    USER_EMAIL_UPDATE
 }

@@ -16,10 +16,10 @@ import work.szczepanskimichal.model.user.dto.*;
 import work.szczepanskimichal.repository.UserRepository;
 import work.szczepanskimichal.util.ValidationUtil;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -99,7 +99,7 @@ public class UserService {
             throw new UserInactiveException(userEmail);
         }
         try {
-            secretKeyService.deleteByUserIdAndKey(secretKey, userId, KeyType.USER_CREATION);
+            secretKeyService.deleteByUserIdAndKey(secretKey, userId);
         } catch (MongoException e) {
             log.error("Activation rolled back due to failure to manage secret key for user: {}", userId);
             throw new SecretKeyException(userId, e.getMessage());
@@ -121,21 +121,28 @@ public class UserService {
 
     @Transactional
     public UserDto updateUser(UUID userId, UserUpdateDto dto) {
+        var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         var dtoType = dto.getUserType();
         validateType(dtoType);
         var dtoEmail = dto.getEmail();
         validateEmail(dtoEmail);
-        var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        if (emailUpdateRequested(dtoEmail, user.getEmail())) {
-            validateEmailAvailability(dtoEmail);
+        var dtoPhoneNumber = dto.getPhoneNumber();
+        validatePhoneNumber(dtoPhoneNumber);
+        var userActive = true;
+        if (emailUpdateRequested(dtoEmail, user.getEmail()) && validateEmailAvailability(dtoEmail)) {
+            setUserActiveStatus(userId, false);
+            var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.USER_EMAIL_UPDATE).getKey();
+            notificationService.sendDeactivationMessage(dtoEmail, userId, secretKey);
+            userActive = false;
         }
         user = user.toBuilder()
                 .email(dtoEmail)
                 .userType(dtoType)
+                .active(userActive)
                 .phoneNumber(dto.getPhoneNumber())
                 .build();
         var userUpdated = userMapper.toUserDto(userRepository.save(user));
-        notificationService.sendNewEmailUpdateMessage(userUpdated.getEmail());
+        notificationService.sendNewUserDataUpdateMessage(dtoEmail);
         return userUpdated;
     }
 
@@ -167,7 +174,7 @@ public class UserService {
 
     public void resetPassword(String email) {
         var userId = userRepository.findIdByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-        var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.PASSWORD_RESET);
+        var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.USER_PASSWORD_RESET);
         notificationService.sendResetPasswordConfirmationMessage(email, secretKey.getKey());
     }
 
@@ -180,12 +187,20 @@ public class UserService {
         validatePasswords(dto.getNewPassword(), dto.getNewPasswordConfirmation());
         userRepository.updatePasswordByEmail(email, hashingService.hashPassword(dto.getNewPassword()));
         try {
-            secretKeyService.deleteByUserIdAndKey(secretKey, userId, KeyType.PASSWORD_RESET);
+            secretKeyService.deleteByUserIdAndKey(secretKey, userId, KeyType.USER_PASSWORD_RESET);
         } catch (MongoException e) {
             log.error("Password update rolled back due to failure to manage secret key for user: {}", userId);
             throw new SecretKeyException(userId, e.getMessage());
         }
         notificationService.sendPasswordUpdatedMessage(email);
+    }
+
+    @Transactional
+    protected void setUserActiveStatus(UUID userId, boolean active) {
+        var updatedRecords = userRepository.setUserActiveStatus(userId, active);
+        if (updatedRecords < 1) {
+            throw new UserDeactivationException(userId);
+        }
     }
 
     private User findUserById(UUID userId) {
@@ -221,8 +236,24 @@ public class UserService {
             log.error("missing field: email");
             throw new MissingFieldException("user email");
         }
+
         if (!isEmailValid(email)) {
             throw new InvalidEmailException();
+        }
+    }
+
+
+    private void validatePhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            log.error("missing field: phoneNumber");
+            throw new MissingFieldException("user phoneNumber");
+        }
+        String regex = "^\\d{1,10}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(phoneNumber);
+
+        if (!matcher.matches()) {
+            throw new InvalidPhoneNumberException();
         }
     }
 
@@ -242,4 +273,5 @@ public class UserService {
     private boolean emailUpdateRequested(String newEmail, String oldEmail) {
         return !oldEmail.equals(newEmail);
     }
+
 }

@@ -11,6 +11,8 @@ public interface SecretKeyRepository extends MongoRepository<SecretKey, String> 
 
     Optional<SecretKey> getKeyByUserIdAndKeyType(UUID userId, KeyType keyType);
 
+    int deleteByKeyAndUserId(UUID secretKey, UUID userId);
+
     int deleteByKeyAndUserIdAndKeyType(UUID key, UUID userId, KeyType keyType);
 
     Optional<SecretKey> getSecretKeyByKeyAndUserId(UUID key, UUID userId);

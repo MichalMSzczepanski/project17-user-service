@@ -28,6 +28,19 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
+    public void sendDeactivationMessage(String userEmail, UUID userId, UUID secretKey) {
+        var parameters = new HashMap<String, String>();
+        parameters.put("userId", userId.toString());
+        parameters.put("secretKey", secretKey.toString());
+        var notification = Notification.builder()
+                .addressee(userEmail)
+                .type(NotificationType.EMAIL)
+                .subject(NotificationSubject.USER_DEACTIVATION)
+                .messageParameters(parameters)
+                .build();
+        kafkaService.sendMessage(notification);
+    }
+
     public void sendActivationConfirmationMessage(String userEmail) {
         var notification = Notification.builder()
                 .addressee(userEmail)
@@ -37,11 +50,11 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
-    public void sendNewEmailUpdateMessage(String userEmail) {
+    public void sendNewUserDataUpdateMessage(String userEmail) {
         var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)
-                .subject(NotificationSubject.USER_EMAIL_UPDATE)
+                .subject(NotificationSubject.USER_DATA_UPDATE)
                 .build();
         kafkaService.sendMessage(notification);
     }
