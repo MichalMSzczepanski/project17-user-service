@@ -30,6 +30,7 @@
   2 create user roles
   1 create user entity
 2 config:
+  24 update postgresql connection to updated service name
   23 add swagger
   22 switch to mongo test containers from flapdoodle
   21 update local and prod config for port exposure in docker-compose

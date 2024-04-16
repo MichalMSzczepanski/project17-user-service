@@ -149,6 +149,7 @@ public class UserService {
     }
 
     public void deleteUser(UUID userId) {
+        //todo check if user exists at all (even though aspects maybe could do this?)
         userRepository.deleteById(userId);
         try {
             secretKeyService.deleteByUserId(userId);
