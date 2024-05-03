@@ -4,6 +4,7 @@
   - spring validation via spring-boot-starter-validation (tbc)
   - job for expired activation keys (24h from creation date)
 3 semantics:
+  - controller tests https://www.baeldung.com/integration-testing-in-spring
   - check why param is needed in aspects in checkForUserIdHeader
   - v1/user/update/userId > exception if userType is lowercase - catch
   - secret keys should have a lifetime span of 24h
@@ -17,7 +18,6 @@
   - split InvalidActivationKeyException into not found with 404 and an actual error
   - update DTO for creation (does not take in "active")
   - externalize and encapsulate credentials/ hashing salt
-  - controller tests
 2 config:
   - move password hashing salt and validation regex to property-library and bean
   - db:

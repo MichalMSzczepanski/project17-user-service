@@ -43,7 +43,7 @@ class UserServiceIntegrationTest {
     private HashingService hashingService;
 
     @Container
-    private static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
+    static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
 
     @DynamicPropertySource
     static void mongoDbProperties(DynamicPropertyRegistry registry) {
@@ -51,12 +51,12 @@ class UserServiceIntegrationTest {
     }
 
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         mongoDBContainer.start();
     }
 
     @AfterAll
-    public static void tearDown() {
+    static void tearDown() {
         mongoDBContainer.stop();
     }
 

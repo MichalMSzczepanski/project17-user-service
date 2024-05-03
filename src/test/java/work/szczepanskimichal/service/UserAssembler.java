@@ -5,9 +5,9 @@ import work.szczepanskimichal.model.user.UserType;
 import work.szczepanskimichal.model.user.User;
 import work.szczepanskimichal.model.user.dto.UserCreateDto;
 
-public abstract class UserAssembler {
+abstract class UserAssembler {
 
-    public static User assembleRandomUser() {
+    static User assembleRandomUser() {
         return User.builder()
                 .email(generateRandomEmail())
                 .password(generateRandomPassword())
