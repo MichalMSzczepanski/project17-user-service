@@ -52,7 +52,7 @@ public class UserService {
                     "user inactive",
                     HttpStatus.BAD_REQUEST));
         }
-        var persistedPasswordOptional = userRepository.findPasswordByEmail(dto.getEmail());
+        var persistedPasswordOptional = userRepository.findPasswordByUserEmail(dto.getEmail());
         if (persistedPasswordOptional.isEmpty()) {
             return Optional.ofNullable(loginResponseService.buildLoginResponse(
                     null,
@@ -161,41 +161,40 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePassword(String email, UserUpdatePasswordDto dto) {
+    public void updatePassword(UUID userId, UserUpdatePasswordDto dto) {
         validatePasswords(dto.getNewPassword(),
                 dto.getNewPasswordConfirmation());
         var hashedCurrentPassword =
-                userRepository.findPasswordByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+                userRepository.findPasswordByUserId(userId).orElseThrow(() -> new UserNotFoundException(userId));
         var hashedConfirmationPassword =
                 hashingService.hashPassword(dto.getCurrentPassword());
         if (!hashedCurrentPassword.equals(hashedConfirmationPassword)) {
             throw new InvalidPasswordException();
         }
-        userRepository.updatePasswordByEmail(email,
+        userRepository.updatePasswordByUserId(userId,
                 hashingService.hashPassword(dto.getNewPassword()));
     }
 
-    public void resetPassword(String email) {
-        var userId = userRepository.findIdByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+    public void resetPassword(UUID userId) {
         var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.USER_PASSWORD_RESET);
-        notificationService.sendResetPasswordConfirmationMessage(email, secretKey.getKey());
+        var userEmail = userRepository.findEmailById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        notificationService.sendResetPasswordConfirmationMessage(userEmail, secretKey.getKey());
     }
 
     @Transactional
-    public void setNewPassword(UUID secretKey, UserResetPasswordDetailsDto dto) {
-        var email = dto.getEmail();
-        var userId =
-                userRepository.findIdByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+    public void setNewPassword(UUID secretKey, UserSetPasswordDto dto) {
+        var userId = dto.getUserId();
+        var userEmail = userRepository.findEmailById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         secretKeyService.validateSecretKey(userId, secretKey);
         validatePasswords(dto.getNewPassword(), dto.getNewPasswordConfirmation());
-        userRepository.updatePasswordByEmail(email, hashingService.hashPassword(dto.getNewPassword()));
+        userRepository.updatePasswordByUserId(userId, hashingService.hashPassword(dto.getNewPassword()));
         try {
             secretKeyService.deleteByUserIdAndKey(secretKey, userId, KeyType.USER_PASSWORD_RESET);
         } catch (MongoException e) {
             log.error("Password update rolled back due to failure to manage secret key for user: {}", userId);
             throw new SecretKeyException(userId, e.getMessage());
         }
-        notificationService.sendPasswordUpdatedMessage(email);
+        notificationService.sendPasswordUpdatedMessage(userEmail);
     }
 
     @Transactional

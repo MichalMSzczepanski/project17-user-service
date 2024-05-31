@@ -24,11 +24,14 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<Boolean> isUserActive(@Param("email") String email);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE User u SET u.password = :password WHERE u.email  = :email")
-    int updatePasswordByEmail(@Param("email") String email, @Param("password") String password);
+    @Query("UPDATE User u SET u.password = :password WHERE u.id  = :userId")
+    int updatePasswordByUserId(@Param("userId") UUID userId, @Param("password") String password);
 
-    @Query("SELECT u.password FROM User u WHERE u.email = :email")
-    Optional<String> findPasswordByEmail(@Param("email") String email);
+    @Query("SELECT u.password FROM User u WHERE u.id = :userId")
+    Optional<String> findPasswordByUserId(@Param("userId") UUID userId);
+
+    @Query("SELECT u.password FROM User u WHERE u.email = :userEmail")
+    Optional<String> findPasswordByUserEmail(@Param("userEmail") String userEmail);
 
     @Query("SELECT u.id FROM User u WHERE u.email = :email")
     Optional<UUID> findIdByEmail(@Param("email") String email);

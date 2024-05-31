@@ -27,10 +27,10 @@ public class AuthenticatedUserController {
         return userService.updateUser(userId, dto);
     }
 
-    @PatchMapping("/update-password/{email}")
-    public ResponseEntity<String> updatePassword(@PathVariable String email,
+    @PatchMapping("/update-password/{userId}")
+    public ResponseEntity<String> updatePassword(@PathVariable UUID userId,
                                                  @RequestBody UserUpdatePasswordDto dto) {
-        userService.updatePassword(email, dto);
+        userService.updatePassword(userId, dto);
         return ResponseEntity.ok("Successfully updated password");
     }
 

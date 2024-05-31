@@ -11,6 +11,7 @@
   2 global exception handler
   1 basic crud for users
 3 semantics:
+  19 update password logic based on userId not userEmail
   18 secret key types update - USER_PASSWORD_RESET, USER_EMAIL_UPDATE
   17 user data update logic update
   16 notifications for activation, password and email update

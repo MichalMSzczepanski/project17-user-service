@@ -214,11 +214,11 @@ class UserServiceIntegrationTest {
                 .newPassword(newPassword)
                 .newPasswordConfirmation(newPassword)
                 .build();
-        userService.updatePassword(persistedUser.getEmail(), userDtoWithNewPassword);
+        userService.updatePassword(persistedUser.getId(), userDtoWithNewPassword);
 
         //then
         var newPasswordHashedExplicitly = hashingService.hashPassword(newPassword);
-        var userPasswordAfterPasswordUpdate = userRepository.findPasswordByEmail(persistedUser.getEmail()).get();
+        var userPasswordAfterPasswordUpdate = userRepository.findPasswordByUserId(persistedUser.getId()).get();
         assertEquals(newPasswordHashedExplicitly, userPasswordAfterPasswordUpdate);
     }
 
@@ -229,7 +229,7 @@ class UserServiceIntegrationTest {
         var user = UserAssembler.assembleRandomUser();
         user = UserAssembler.hashUserPassword(user, hashingService, currentPassword);
         var persistedUser = userRepository.save(user);
-        var email = persistedUser.getEmail();
+        var userId = persistedUser.getId();
 
         //when
         var newPassword = "changedPassword";
@@ -240,7 +240,7 @@ class UserServiceIntegrationTest {
                 .build();
 
         //then
-        assertThrows(InvalidPasswordException.class, () -> userService.updatePassword(email,
+        assertThrows(InvalidPasswordException.class, () -> userService.updatePassword(userId,
                 userDtoWithNewPassword));
     }
 

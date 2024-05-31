@@ -5,7 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.model.user.dto.UserCreateDto;
 import work.szczepanskimichal.model.user.dto.UserDto;
-import work.szczepanskimichal.model.user.dto.UserResetPasswordDetailsDto;
+import work.szczepanskimichal.model.user.dto.UserResetPasswordDto;
+import work.szczepanskimichal.model.user.dto.UserSetPasswordDto;
 import work.szczepanskimichal.service.UserService;
 
 import java.util.UUID;
@@ -23,14 +24,14 @@ public class PublicUserController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody UserResetPasswordDetailsDto dto) {
-        userService.resetPassword(dto.getEmail());
-        return ResponseEntity.ok().body(String.format("Sent password reset link to email: %s", dto.getEmail()));
+    public ResponseEntity<String> resetPassword(@RequestBody UserResetPasswordDto dto) {
+        userService.resetPassword(dto.getUserId());
+        return ResponseEntity.ok().body(String.format("Sent password reset link to user with id: %s", dto.getUserId()));
     }
 
     @PostMapping("/set-new-password/{secretKey}")
     public ResponseEntity<String> setNewPassword(@PathVariable("secretKey") UUID secretKey,
-                                                 @RequestBody UserResetPasswordDetailsDto dto) {
+                                                 @RequestBody UserSetPasswordDto dto) {
         userService.setNewPassword(secretKey, dto);
         return ResponseEntity.ok().body("Successfully updated password");
     }
