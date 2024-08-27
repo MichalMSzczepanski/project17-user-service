@@ -115,6 +115,14 @@ public class UserService {
         return userMapper.toUserDto(user);
     }
 
+    public UserCommsDto getUserComms(UUID userId) {
+        if (userId == null) {
+            throw new MissingFieldException("user id");
+        }
+        var user = findUserById(userId);
+        return userMapper.toUserCommsDto(user);
+    }
+
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream().map(userMapper::toUserDto).toList();
     }

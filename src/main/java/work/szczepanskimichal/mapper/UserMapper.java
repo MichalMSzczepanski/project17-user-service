@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
+import work.szczepanskimichal.model.user.dto.UserCommsDto;
 import work.szczepanskimichal.model.user.dto.UserCreateDto;
 import work.szczepanskimichal.model.user.dto.UserDto;
 import work.szczepanskimichal.model.user.dto.UserUpdateDto;
@@ -20,6 +21,8 @@ public abstract class UserMapper {
     public abstract User toEntity(UserCreateDto userCreateDto);
 
     public abstract UserDto toUserDto(User user);
+
+    public abstract UserCommsDto toUserCommsDto(User user);
 
     public abstract UserUpdateDto toUserUpdateDto(User user);
 
