@@ -8,5 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class KafkaUtil {
-    private String notificationTopic;
+    private String userTopic;
 }

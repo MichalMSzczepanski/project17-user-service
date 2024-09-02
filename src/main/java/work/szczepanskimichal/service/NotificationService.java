@@ -15,7 +15,7 @@ public class NotificationService {
 
     private final KafkaService kafkaService;
 
-    public void sendActivationMessage(String userEmail, UUID userId, UUID secretKey) {
+    public void sendUserActivationNotification(String userEmail, UUID userId, UUID secretKey) {
         var parameters = new HashMap<String, String>();
         parameters.put("userId", userId.toString());
         parameters.put("secretKey", secretKey.toString());
@@ -28,7 +28,7 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
-    public void sendDeactivationMessage(String userEmail, UUID userId, UUID secretKey) {
+    public void sendUserDeactivationNotification(String userEmail, UUID userId, UUID secretKey) {
         var parameters = new HashMap<String, String>();
         parameters.put("userId", userId.toString());
         parameters.put("secretKey", secretKey.toString());
@@ -41,7 +41,7 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
-    public void sendActivationConfirmationMessage(String userEmail) {
+    public void sendUserActivationConfirmationNotification(String userEmail) {
         var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)
@@ -50,7 +50,7 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
-    public void sendNewUserDataUpdateMessage(String userEmail) {
+    public void sendNewUserDataUpdateNotification(String userEmail) {
         var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)
@@ -59,7 +59,7 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
-    public void sendResetPasswordConfirmationMessage(String userEmail, UUID secretKey) {
+    public void sendResetUserPasswordConfirmationNotification(String userEmail, UUID secretKey) {
         var parameters = new HashMap<String, String>();
         parameters.put("secretKey", secretKey.toString());
         var notification = Notification.builder()
@@ -71,7 +71,7 @@ public class NotificationService {
         kafkaService.sendMessage(notification);
     }
 
-    public void sendPasswordUpdatedMessage(String userEmail) {
+    public void sendUserPasswordUpdatedNotification(String userEmail) {
         var notification = Notification.builder()
                 .addressee(userEmail)
                 .type(NotificationType.EMAIL)

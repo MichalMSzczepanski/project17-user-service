@@ -8,5 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class CredentialsUtil {
-    String password;
+    private String password;
 }

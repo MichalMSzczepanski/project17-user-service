@@ -82,7 +82,7 @@ public class UserService {
         try {
             var secretKey = secretKeyService.assignSecretKeyToUser(createdDto.getId(), KeyType.USER_CREATION).getKey();
             createdDto = createdDto.toBuilder().secretKey(secretKey).build();
-            notificationService.sendActivationMessage(createdDto.getEmail(), createdDto.getId(), secretKey);
+            notificationService.sendUserActivationNotification(createdDto.getEmail(), createdDto.getId(), secretKey);
         } catch (MongoException e) {
             log.error("User creation rolled back due to failure to manage secret key for user: {}", createdDto.getId());
             throw new SecretKeyException(createdDto.getId(), e.getMessage());
@@ -104,7 +104,7 @@ public class UserService {
             log.error("Activation rolled back due to failure to manage secret key for user: {}", userId);
             throw new SecretKeyException(userId, e.getMessage());
         }
-        notificationService.sendActivationConfirmationMessage(userEmail);
+        notificationService.sendUserActivationConfirmationNotification(userEmail);
     }
 
     public UserDto getUser(UUID userId) {
@@ -142,7 +142,7 @@ public class UserService {
         if (emailUpdateRequested(dtoEmail, user.getEmail()) && validateEmailAvailability(dtoEmail)) {
             setUserActiveStatus(userId, false);
             var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.USER_EMAIL_UPDATE).getKey();
-            notificationService.sendDeactivationMessage(dtoEmail, userId, secretKey);
+            notificationService.sendUserDeactivationNotification(dtoEmail, userId, secretKey);
             userActive = false;
         }
         user = user.toBuilder()
@@ -152,7 +152,7 @@ public class UserService {
                 .phoneNumber(dto.getPhoneNumber())
                 .build();
         var userUpdated = userMapper.toUserDto(userRepository.save(user));
-        notificationService.sendNewUserDataUpdateMessage(dtoEmail);
+        notificationService.sendNewUserDataUpdateNotification(dtoEmail);
         return userUpdated;
     }
 
@@ -186,7 +186,7 @@ public class UserService {
     public void resetPassword(UUID userId) {
         var secretKey = secretKeyService.assignSecretKeyToUser(userId, KeyType.USER_PASSWORD_RESET);
         var userEmail = userRepository.findEmailById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        notificationService.sendResetPasswordConfirmationMessage(userEmail, secretKey.getKey());
+        notificationService.sendResetUserPasswordConfirmationNotification(userEmail, secretKey.getKey());
     }
 
     @Transactional
@@ -202,7 +202,7 @@ public class UserService {
             log.error("Password update rolled back due to failure to manage secret key for user: {}", userId);
             throw new SecretKeyException(userId, e.getMessage());
         }
-        notificationService.sendPasswordUpdatedMessage(userEmail);
+        notificationService.sendUserPasswordUpdatedNotification(userEmail);
     }
 
     @Transactional

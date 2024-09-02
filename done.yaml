@@ -1,6 +1,7 @@
 5 fixes:
   <not tracked>
 4 logic:
+  11 refactor notification_topic to user_topic
   10 get user comms via internal controller
   9 in AuthenticatedUserController check via aspects each request for X-User-Id header
   8 login integration with gateway

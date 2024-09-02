@@ -22,7 +22,7 @@ public class KafkaService {
     public void sendMessage(Notification notification) {
         try {
             var message = objectMapper.writeValueAsString(notification);
-            kafkaTemplate.send(kafkaUtil.getNotificationTopic(), message);
+            kafkaTemplate.send(kafkaUtil.getUserTopic(), message);
         } catch (JsonProcessingException e) {
             log.error("Failed to parse notification: {}", notification);
         }
